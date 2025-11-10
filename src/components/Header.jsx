@@ -32,7 +32,16 @@ const Header = () => {
           <div className="btns-groups">
             {isAuthenticated ? (
               <>
-                <span className="user-name">{user?.name}</span>
+                <Link to="/profile" className="user-name">
+                  {user?.profilePicture ? (
+                    <img 
+                      src={user.profilePicture} 
+                      alt={user?.name} 
+                      className="user-avatar"
+                    />
+                  ) : null}
+                  <span>{user?.name}</span>
+                </Link>
                 <Link className="btn-chat btn-p" to="/fashion-chat">
                   Fashion Chat
                 </Link>

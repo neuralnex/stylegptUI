@@ -1,11 +1,33 @@
-@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Poppins:wght@400;500;600;700;800&family=Roboto+Mono:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=Rajdhani:wght@300;400;500;600;700&display=swap");
 
 :root {
-  --bgp: #ffe14b;
-  --bgw: #fff;
-  --bgb: #121212;
-  --bgsb: #1e1e1e;
-  --border: #ffffff26;
+  // Neon Color Palette
+  --neon-cyan: #00ffff;
+  --neon-magenta: #ff00ff;
+  --neon-blue: #0080ff;
+  --neon-green: #00ff41;
+  --neon-yellow: #ffff00;
+  --neon-pink: #ff1493;
+  --neon-purple: #9d00ff;
+  
+  // Background Colors
+  --bgp: var(--neon-cyan);
+  --bgw: #ffffff;
+  --bgb: #0a0a0f;
+  --bgsb: #151520;
+  --bg-card: rgba(21, 21, 32, 0.8);
+  --border: rgba(0, 255, 255, 0.3);
+  --border-glow: rgba(0, 255, 255, 0.6);
+  
+  // Glow Effects
+  --glow-cyan: 0 0 20px rgba(0, 255, 255, 0.5),
+               0 0 40px rgba(0, 255, 255, 0.3),
+               0 0 60px rgba(0, 255, 255, 0.2);
+  --glow-magenta: 0 0 20px rgba(255, 0, 255, 0.5),
+                  0 0 40px rgba(255, 0, 255, 0.3),
+                  0 0 60px rgba(255, 0, 255, 0.2);
+  --glow-blue: 0 0 20px rgba(0, 128, 255, 0.5),
+               0 0 40px rgba(0, 128, 255, 0.3);
 }
 
 *,
@@ -21,49 +43,102 @@
 
 html {
   font-size: 62.5%;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-cyan) var(--bgb);
 
   &::-webkit-scrollbar {
-    display: none;
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--bgb);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--neon-cyan);
+    border-radius: 4px;
+    box-shadow: 0 0 10px var(--neon-cyan);
   }
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: var(--bgb);
+  font-family: "Exo 2", sans-serif;
+  background: linear-gradient(135deg, #0a0a0f 0%, #151520 50%, #0a0a0f 100%);
+  background-attachment: fixed;
   color: var(--bgw);
   overflow-x: hidden;
+  position: relative;
+  
+  // Animated background grid
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
 }
 
 .home-page {
   width: 100%;
   overflow-x: hidden;
   max-width: 100vw;
+  position: relative;
+  z-index: 1;
 }
 
 p {
-  font-family: "Roboto Mono", monospace;
+  font-family: "Exo 2", sans-serif;
   font-size: 1.5rem;
   line-height: 1.7;
-  color: #9e9d9a;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 a {
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 h1 {
+  font-family: "Orbitron", sans-serif;
   font-size: 5.5rem;
-  font-weight: 500;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  letter-spacing: 2px;
 
   @media (max-width: 400px) {
     font-size: 4rem;
   }
 }
 
+h2 {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
 h3 {
+  font-family: "Orbitron", sans-serif;
   font-size: 3rem;
-  font-weight: 400;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 li {
@@ -76,32 +151,61 @@ button {
   padding: 1rem 2rem;
   background-color: transparent;
   cursor: pointer;
-  font-family: "Roboto Mono", monospace !important;
+  font-family: "Exo 2", sans-serif !important;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-p {
   font-size: 1.6rem;
-  background-color: var(--bgp);
-  color: var(--bgsb);
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+  color: var(--bgb);
   text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 1px;
-  border-radius: 0.4rem;
-  transition: all 0.4s ease-in-out;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border-radius: 0.5rem;
+  padding: 1.2rem 2.5rem;
+  box-shadow: var(--glow-cyan);
+  border: 1px solid var(--neon-cyan);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
 
   &-big {
     font-size: 1.8rem;
+    padding: 1.5rem 3rem;
   }
 
   &:hover {
-    opacity: 90%;
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.4);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
 .CircleIco {
-  background-color: #9797973d;
-  backdrop-filter: blur(5px);
-
+  background: rgba(0, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   border-radius: 50%;
   overflow: hidden;
   width: 39px;
@@ -109,17 +213,25 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
 
   svg {
     margin-top: 6px;
     width: 30px;
-    fill: var(--bgw);
-    transition: all 0.2s ease-in-out;
+    fill: var(--neon-cyan);
+    filter: drop-shadow(0 0 5px var(--neon-cyan));
+    transition: all 0.3s ease;
 
     &:first-child {
       translate: -35px 0;
     }
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    transform: scale(1.05);
   }
 }
 
@@ -130,8 +242,11 @@ button {
   font-size: 1.8rem;
   text-transform: uppercase;
   gap: 1rem;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   cursor: pointer;
+  color: var(--neon-cyan);
+  font-weight: 600;
+  transition: all 0.3s ease;
 
   &-90 {
     .CircleIco {
@@ -145,6 +260,9 @@ button {
   }
 
   &:hover {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 10px var(--neon-magenta);
+    
     .CircleIco {
       svg {
         &:first-child {
@@ -152,6 +270,43 @@ button {
         }
       }
     }
+  }
+}
+
+// Neon text effect utility
+.neon-text {
+  color: var(--neon-cyan);
+  text-shadow: 
+    0 0 10px var(--neon-cyan),
+    0 0 20px var(--neon-cyan),
+    0 0 30px var(--neon-cyan);
+}
+
+.neon-text-magenta {
+  color: var(--neon-magenta);
+  text-shadow: 
+    0 0 10px var(--neon-magenta),
+    0 0 20px var(--neon-magenta),
+    0 0 30px var(--neon-magenta);
+}
+
+// Glass morphism effect
+.glass {
+  background: rgba(21, 21, 32, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+// Animated border
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    border-color: rgba(0, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
   }
 }
 

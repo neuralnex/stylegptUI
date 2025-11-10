@@ -70,6 +70,29 @@ export const profileAPI = {
     });
     return await response.json();
   },
+
+  updateProfile: async (name, profilePictureFile, removePicture = false) => {
+    const formData = new FormData();
+    if (name) {
+      formData.append("name", name);
+    }
+    if (profilePictureFile) {
+      formData.append("profilePicture", profilePictureFile);
+    }
+    if (removePicture) {
+      formData.append("removePicture", "true");
+    }
+
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/api/profile`, {
+      method: "PUT",
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      body: formData,
+    });
+    return await response.json();
+  },
 };
 
 // Upload API

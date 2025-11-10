@@ -1,43 +1,107 @@
 .hero {
-  padding: 1rem;
+  padding: 2rem;
   width: 100%;
   height: 100%;
   margin-top: 0;
-  p{
-    color: #fff;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .container {
     width: 100%;
     height: 100%;
     min-height: calc(100vh - 85px);
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     position: relative;
     margin-top: 0;
+    background: linear-gradient(135deg, rgba(10, 10, 15, 0.9), rgba(21, 21, 32, 0.9));
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 0 50px rgba(0, 255, 255, 0.1),
+      inset 0 0 50px rgba(0, 255, 255, 0.05);
+    overflow: hidden;
+    z-index: 2;
 
-    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.714)),
-      url("https://images.unsplash.com/photo-1618079843638-6e069db182a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 255, 255, 0.03) 2px,
+          rgba(0, 255, 255, 0.03) 4px
+        );
+      animation: scan 20s linear infinite;
+      pointer-events: none;
+    }
 
     .text {
       position: absolute;
-      bottom: 2rem;
-      left: 1rem;
-      width: 100%;
+      bottom: 4rem;
+      left: 3rem;
+      width: calc(100% - 6rem);
+      z-index: 3;
 
       h1 {
+        font-family: "Orbitron", sans-serif;
         font-size: 12rem;
         line-height: 1;
-        font-weight: 500;
-        margin-bottom: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta), var(--neon-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 
+          0 0 30px rgba(0, 255, 255, 0.5),
+          0 0 60px rgba(255, 0, 255, 0.3);
+        letter-spacing: 4px;
+        position: relative;
+        animation: glowPulse 3s ease-in-out infinite;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+          box-shadow: 0 0 20px var(--neon-cyan);
+          animation: lineGlow 2s ease-in-out infinite;
+        }
       }
 
       p {
         font-size: 1.8rem;
         max-width: 900px;
-        line-height: 1.6;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        margin-bottom: 2rem;
       }
 
       &-desc {
@@ -62,10 +126,33 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2.4rem;
+            padding: 1.2rem 2.8rem;
             border-radius: 0.5rem;
             text-decoration: none;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+
+            &::before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+              transition: left 0.5s;
+            }
+
+            &:hover {
+              transform: translateY(-3px);
+              box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+
+              &::before {
+                left: 100%;
+              }
+            }
           }
         }
 
@@ -77,6 +164,35 @@
   }
 }
 
+@keyframes scan {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, 100px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8));
+  }
+}
+
+@keyframes lineGlow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--neon-cyan);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-magenta);
+  }
+}
+
 @media (max-width: 999px) {
   .hero {
     padding: 1rem 1rem 0;
@@ -85,15 +201,22 @@
     .container {
       min-height: calc(100vh - 120px);
       margin-top: 1rem;
+      border-radius: 0.8rem;
 
       .text {
-        bottom: 1.5rem;
-        left: 1rem;
+        bottom: 2rem;
+        left: 1.5rem;
+        width: calc(100% - 3rem);
         padding-right: 1rem;
 
         h1 {
-          font-size: 8rem;
+          font-size: 6rem;
           margin-bottom: 1.5rem;
+          letter-spacing: 2px;
+        }
+
+        p {
+          font-size: 1.6rem;
         }
 
         &-desc {
@@ -101,52 +224,17 @@
           gap: 1.5rem;
           padding-right: 0;
 
-          p {
-            font-size: 1.6rem;
-          }
-
           .hero-actions {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
             width: 100%;
-          }
-        }
-      }
-    }
-  }
-}
+            flex-direction: column;
 
-@media (max-width: 768px) {
-  .hero {
-    padding: 0.5rem 0.5rem 0;
-    margin-top: 0.5rem;
-
-    .container {
-      min-height: calc(100vh - 100px);
-      margin-top: 0.5rem;
-
-      .text {
-        bottom: 1rem;
-        left: 0.5rem;
-        padding-right: 0.5rem;
-
-        h1 {
-          font-size: 6rem;
-          margin-bottom: 1rem;
-        }
-
-        &-desc {
-          p {
-            font-size: 1.5rem;
-            max-width: 100%;
-          }
-
-          .hero-actions {
             .hero-chat-btn {
               width: 100%;
-              text-align: center;
-              padding: 1rem 1.5rem;
+              justify-content: center;
+            }
+
+            button {
+              width: 100%;
             }
           }
         }
@@ -157,73 +245,28 @@
 
 @media (max-width: 610px) {
   .hero {
-    padding: 0.5rem;
-    margin-top: 0;
+    padding: 1rem 0.8rem 0;
 
     .container {
-      min-height: calc(100vh - 90px);
-      margin-top: 0.5rem;
-
       .text {
-        bottom: 1rem;
-        left: 0.5rem;
-        padding-right: 0.5rem;
+        bottom: 1.5rem;
+        left: 1rem;
+        width: calc(100% - 2rem);
 
         h1 {
-          font-size: 5rem;
+          font-size: 4.5rem;
           margin-bottom: 1rem;
-          line-height: 1.1;
+          letter-spacing: 1px;
+        }
+
+        p {
+          font-size: 1.4rem;
+          line-height: 1.6;
         }
 
         &-desc {
-          p {
-            font-size: 1.4rem;
-            line-height: 1.5;
-          }
-
           .hero-actions {
-            gap: 0.8rem;
-
-            button, a {
-              font-size: 1.4rem;
-              padding: 0.8rem 1.2rem;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    padding: 0.5rem;
-    margin-top: 0;
-
-    .container {
-      min-height: calc(100vh - 85px);
-      margin-top: 0;
-
-      .text {
-        bottom: 0.8rem;
-        left: 0.5rem;
-        padding-right: 0.5rem;
-
-        h1 {
-          font-size: 4rem;
-          margin-bottom: 0.8rem;
-        }
-
-        &-desc {
-          p {
-            font-size: 1.3rem;
-          }
-
-          .hero-actions {
-            button, a {
-              font-size: 1.3rem;
-              padding: 0.7rem 1rem;
-            }
+            gap: 1rem;
           }
         }
       }
@@ -237,13 +280,10 @@
       .text {
         h1 {
           font-size: 3.5rem;
-          margin-bottom: 0.6rem;
         }
 
-        &-desc {
-          p {
-            font-size: 1.2rem;
-          }
+        p {
+          font-size: 1.3rem;
         }
       }
     }
