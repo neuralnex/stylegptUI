@@ -2,19 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { PrimaryBtn } from "./Btn";
 import { useAuth } from "../context/AuthContext";
-import AuthModal from "./AuthModal";
 import "./Header.scss";
 
 const headerMenu = ["Projects", "Services", "Studio", "Blog"];
 
 const Header = () => {
   const [active, setActive] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
-    setShowAuthModal(false);
   };
 
   return (
@@ -40,7 +37,12 @@ const Header = () => {
               </>
             ) : (
               <>
-                <PrimaryBtn text="Login" onClick={() => setShowAuthModal(true)} />
+                <Link to="/login" className="btn-login-link">
+                  Login
+                </Link>
+                <Link to="/register" className="btn-register btn-p">
+                  Sign Up
+                </Link>
               </>
             )}
             <div
@@ -54,9 +56,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-      {showAuthModal && (
-        <AuthModal onClose={() => setShowAuthModal(false)} />
-      )}
     </div>
   );
 };

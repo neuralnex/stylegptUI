@@ -1,0 +1,202 @@
+.register-page {
+  min-height: 100vh;
+  background-color: var(--bgb);
+  display: flex;
+  flex-direction: column;
+
+  .register-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+
+  .register-card {
+    width: 100%;
+    max-width: 550px;
+    background-color: var(--bgsb);
+    border-radius: 2rem;
+    padding: 4rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+    .register-header {
+      text-align: center;
+      margin-bottom: 3rem;
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: var(--bgw);
+
+        .brand-name {
+          color: var(--bgp);
+          font-weight: 700;
+        }
+      }
+
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+        color: var(--bgw);
+      }
+
+      p {
+        font-size: 1.5rem;
+        color: #9e9d9a;
+        line-height: 1.6;
+      }
+    }
+
+    .register-form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+
+        label {
+          font-size: 1.4rem;
+          color: var(--bgw);
+          font-family: "Roboto Mono", monospace;
+          font-weight: 500;
+        }
+
+        input {
+          padding: 1.2rem 1.5rem;
+          background-color: var(--bgb);
+          border: 1px solid var(--border);
+          border-radius: 0.8rem;
+          color: var(--bgw);
+          font-size: 1.5rem;
+          font-family: "Roboto Mono", monospace;
+          outline: none;
+          transition: all 0.3s;
+
+          &:focus {
+            border-color: var(--bgp);
+            box-shadow: 0 0 0 3px rgba(255, 225, 75, 0.1);
+          }
+
+          &::placeholder {
+            color: #9e9d9a;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      .error-message {
+        background-color: rgba(255, 0, 0, 0.1);
+        border: 1px solid rgba(255, 0, 0, 0.3);
+        color: #ff6b6b;
+        padding: 1.2rem;
+        border-radius: 0.8rem;
+        font-size: 1.4rem;
+        font-family: "Roboto Mono", monospace;
+        text-align: center;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1.4rem;
+        font-size: 1.6rem;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .register-footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+
+      p {
+        font-size: 1.4rem;
+        color: #9e9d9a;
+
+        .login-link {
+          color: var(--bgp);
+          text-decoration: none;
+          font-weight: 500;
+          transition: opacity 0.3s;
+
+          &:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .register-page {
+    .register-container {
+      padding: 2rem 1rem;
+    }
+
+    .register-card {
+      padding: 3rem 2rem;
+
+      .register-header {
+        h1 {
+          font-size: 2.8rem;
+        }
+
+        h2 {
+          font-size: 2rem;
+        }
+
+        p {
+          font-size: 1.4rem;
+        }
+      }
+
+      .register-form {
+        gap: 1.5rem;
+
+        .form-group {
+          input {
+            padding: 1rem 1.2rem;
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .register-page {
+    .register-card {
+      padding: 2rem 1.5rem;
+
+      .register-header {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        h2 {
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+}
+
