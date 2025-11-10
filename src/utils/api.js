@@ -92,7 +92,22 @@ export const uploadAPI = {
   },
 };
 
-// Suggest API
+// Fashion Chat API (without wardrobe - Milestone 1)
+export const fashionChatAPI = {
+  sendMessage: async (message, sessionId) => {
+    const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
+    const response = await fetch(`${FASHION_CHAT_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message, session_id: sessionId }),
+    });
+    return await response.json();
+  },
+};
+
+// Suggest API (with wardrobe - Milestone 2)
 export const suggestAPI = {
   getSuggestion: async (message, sessionId) => {
     const response = await fetch(`${API_BASE_URL}/api/suggest`, {

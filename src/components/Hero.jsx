@@ -20,7 +20,7 @@ const Hero = () => {
             </p>
             <div className="hero-actions">
               <SecondaryBtn text={"Explore Features"} classText="btn-s-90" />
-              <Link to="/chat" className="btn-p hero-chat-btn">
+              <Link to="/fashion-chat" className="btn-p hero-chat-btn">
                 Chat for suggestions
               </Link>
             </div>

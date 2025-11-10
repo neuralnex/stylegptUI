@@ -33,8 +33,11 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 <span className="user-name">{user?.name}</span>
+                <Link className="btn-chat btn-p" to="/fashion-chat">
+                  Fashion Chat
+                </Link>
                 <Link className="btn-chat btn-p" to="/chat">
-                  Chat
+                  Wardrobe Chat
                 </Link>
                 <PrimaryBtn text="Logout" onClick={handleLogout} />
               </>

@@ -17,7 +17,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/");
+      navigate("/login");
     }
   }, [isAuthenticated, navigate]);
 
@@ -79,15 +79,15 @@ const Chat = () => {
       <Header />
       <div className="chat-container">
         <div className="chat-header">
-          <h1>StyleGPT Chat</h1>
-          <p>Get AI-powered outfit suggestions based on your wardrobe</p>
+          <h1>Chat with Wardrobe</h1>
+          <p>Get AI-powered outfit suggestions based on your uploaded wardrobe items</p>
         </div>
 
         <div className="messages-container">
           {messages.length === 0 ? (
             <div className="empty-state">
-              <p>Start a conversation to get outfit suggestions!</p>
-              <p>Try asking: "What should I wear for a casual dinner?"</p>
+              <p>Start a conversation to get personalized outfit suggestions from your wardrobe!</p>
+              <p>Try asking: "What should I wear for a casual dinner?" or "Suggest an outfit for a date"</p>
             </div>
           ) : (
             messages.map((msg, index) => (
@@ -114,7 +114,7 @@ const Chat = () => {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Ask for outfit suggestions..."
+            placeholder="Ask for outfit suggestions from your wardrobe..."
             disabled={loading}
           />
           <PrimaryBtn type="submit" text="Send" disabled={loading || !inputMessage.trim()} />
