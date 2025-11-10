@@ -20,7 +20,9 @@ const Header = () => {
   return (
     <div className="header">
       <div className="container">
-        <h1 className="logo">StyleGPT</h1>
+        <Link to="/" className="logo-link">
+          <h1 className="logo">StyleGPT</h1>
+        </Link>
         <div className={active ? `nav active` : `nav`}>
           <ul>
             {headerMenu.map((elem, index) => (
