@@ -4,20 +4,36 @@ import "./Service.scss";
 
 const serviceData = [
   {
-    text: "BRANDING",
-    desc: "Develop a strong, recognizable fashion brand identity.",
+    text: "SMART OUTFIT SUGGESTIONS",
+    desc: "Get personalized outfit ideas based on your wardrobe, preferences, and the latest trends.",
   },
   {
-    text: "IDENTITY",
-    desc: "We create a unique and consistent image for your fashion brand.",
+    text: "WARDROBE MANAGEMENT",
+    desc: "Digitally organize your clothes, categorize them by type or season, and track what you wear most.",
   },
   {
-    text: "MARKETING",
-    desc: "Reach and engage your target audience effectively on all plattforms.",
+    text: "VIRTUAL TRY-ON",
+    desc: "Visualize your outfits on a customizable 3D avatar that matches your body type and measurements.",
   },
   {
-    text: "E-COMMERCE",
-    desc: "Optimize online sales and drive growth for your e-commere store.",
+    text: "STYLE INSIGHTS",
+    desc: "Receive daily or event-based fashion tips curated from current fashion data and influencer trends.",
+  },
+  {
+    text: "OUTFIT PLANNING CALENDAR",
+    desc: "Plan your looks ahead for upcoming events and never worry about last-minute outfit stress.",
+  },
+  {
+    text: "MIX AND MATCH ASSISTANT",
+    desc: "Experiment with different clothing combinations to discover new looks you might not have considered.",
+  },
+  {
+    text: "COMMUNITY INSPIRATION",
+    desc: "Browse and share outfit ideas from other users, gain inspiration, and explore trending styles.",
+  },
+  {
+    text: "AI STYLIST CHAT",
+    desc: "Chat with your virtual stylist for quick advice on colors, fits, or accessories before you step out.",
   },
 ];
 

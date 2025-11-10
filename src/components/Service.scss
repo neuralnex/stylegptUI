@@ -1,9 +1,12 @@
 .service {
-  padding: 1rem;
+  padding: 4rem 1rem;
+  background-color: var(--bgb);
 
   .container {
+    max-width: 1400px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
 
     .ServiceCard {
@@ -38,18 +41,22 @@
   }
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1200px) {
   .service {
     .container {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
 
-@media (max-width: 499px) {
+@media (max-width: 768px) {
   .service {
+    padding: 3rem 1rem;
+    
     .container {
       grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
   }
 }
+

@@ -1,0 +1,134 @@
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 2rem;
+}
+
+.auth-modal {
+  background-color: var(--bgsb);
+  border-radius: 1rem;
+  padding: 3rem;
+  max-width: 450px;
+  width: 100%;
+  position: relative;
+  border: 1px solid var(--border);
+
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--bgw);
+    font-size: 3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.5rem;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  h2 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 1.4rem;
+        color: var(--bgw);
+        font-family: "Roboto Mono", monospace;
+      }
+
+      input {
+        padding: 1rem 1.5rem;
+        background-color: var(--bgb);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        color: var(--bgw);
+        font-size: 1.5rem;
+        font-family: "Roboto Mono", monospace;
+        outline: none;
+        transition: border-color 0.3s;
+
+        &:focus {
+          border-color: var(--bgp);
+        }
+
+        &::placeholder {
+          color: #9e9d9a;
+        }
+      }
+    }
+
+    .error-message {
+      background-color: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      color: #ff6b6b;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-size: 1.4rem;
+      font-family: "Roboto Mono", monospace;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+
+  .toggle-auth {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    color: #9e9d9a;
+
+    button {
+      background: none;
+      border: none;
+      color: var(--bgp);
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: inherit;
+      font-family: inherit;
+      padding: 0;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+@media (max-width: 610px) {
+  .auth-modal {
+    padding: 2rem;
+    margin: 1rem;
+
+    h2 {
+      font-size: 2.5rem;
+    }
+  }
+}
+

@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Hero.scss";
-import { SecondaryBtn } from "./Btn";
+import { PrimaryBtn, SecondaryBtn } from "./Btn";
 
 const Hero = () => {
   return (
@@ -8,14 +9,21 @@ const Hero = () => {
       <div className="container">
         <div className="text">
           <h1>
-            Fashion <br />& Branding
+            StyleGPT <br />Your AI Fashion Assistant
           </h1>
           <div className="text-desc">
             <p>
-              Bringing Your Fashion Brand's Unique Identity to Life Through
-              Strategic Marketing and Advertising.
+              StyleGPT is your personal AI-powered fashion assistant that helps you look your best every day. 
+              It simplifies outfit selection, wardrobe organization, and style discovery using intelligent recommendations 
+              tailored to your mood, occasion, and personality. Whether you are dressing for work, a date, or a casual outing, 
+              StyleGPT ensures you always step out with confidence and flair.
             </p>
-            <SecondaryBtn text={"Learn more"} classText="btn-s-90" />
+            <div className="hero-actions">
+              <SecondaryBtn text={"Explore Features"} classText="btn-s-90" />
+              <Link to="/chat" className="btn-p hero-chat-btn">
+                Chat for suggestions
+              </Link>
+            </div>
           </div>
         </div>
       </div>
