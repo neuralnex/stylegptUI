@@ -44,9 +44,10 @@ const Contact = () => {
       <div className="container-1">
         <span>Contact</span>
         <div className="text">
-          <h1>Let's make your fashion brand shine</h1>
+          <h1>Ready to transform your wardrobe?</h1>
+          <p>Join StyleGPT today and experience the future of fashion styling</p>
           <button className="btn-s">
-            Get in touch
+            Get Started
             <CircleIcon />
           </button>
         </div>

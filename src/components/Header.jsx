@@ -4,7 +4,10 @@ import { PrimaryBtn } from "./Btn";
 import { useAuth } from "../context/AuthContext";
 import "./Header.scss";
 
-const headerMenu = ["Projects", "Services", "Studio", "Blog"];
+const headerMenu = [
+  { name: "Upload Wardrobe", path: "/upload" },
+  { name: "Blog", path: "/blog" },
+];
 
 const Header = () => {
   const [active, setActive] = useState(false);
@@ -22,7 +25,7 @@ const Header = () => {
           <ul>
             {headerMenu.map((elem, index) => (
               <li key={index}>
-                <Link to={`/${elem}`}>{elem}</Link>
+                <Link to={elem.path}>{elem.name}</Link>
               </li>
             ))}
           </ul>

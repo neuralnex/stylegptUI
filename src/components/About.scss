@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 
   img {
     width: 100%;
@@ -14,13 +17,20 @@
 
   .container {
     width: 100%;
+    max-width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
 
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
+      gap: 1.5rem;
 
       .image {
         height: 400px !important;
@@ -31,8 +41,14 @@
       }
 
       .text {
-        min-height: 400px;
+        min-height: auto;
         padding: 2rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .text {
+        padding: 1.5rem !important;
       }
     }
 
@@ -78,6 +94,14 @@
 .About {
   .container-2 {
     gap: 2rem;
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+    }
     .col-1 {
       display: flex;
       flex-direction: column;
