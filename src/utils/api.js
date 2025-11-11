@@ -135,7 +135,7 @@ export const fashionChatAPI = {
     try {
       const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 second timeout
       
       const response = await fetch(`${FASHION_CHAT_URL}/chat`, {
         method: "POST",
@@ -182,7 +182,7 @@ export const suggestAPI = {
   getSuggestion: async (message, sessionId, retryCount = 0) => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 second timeout
       
       const response = await fetch(`${API_BASE_URL}/api/suggest`, {
         method: "POST",
