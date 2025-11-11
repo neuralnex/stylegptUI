@@ -6,7 +6,7 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
 
   .container {
     display: flex;
@@ -348,7 +348,14 @@
 
   .nav.active {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
     background: rgba(21, 21, 34, 0.98);
     backdrop-filter: blur(18px);
     flex-direction: column;
