@@ -267,41 +267,39 @@
   justify-content: center;
   width: 45px;
   aspect-ratio: 1;
-  background: rgba(0, 255, 255, 0.1);
-  border: 1px solid var(--neon-cyan);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 0.5rem;
   gap: 6px;
   padding: 8px;
   z-index: 9999;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  box-shadow: none;
 
   span {
     display: inline-block;
     width: 100%;
     height: 3px;
-    background: var(--neon-cyan);
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 1rem;
     transition: all 0.5s ease-in-out;
     transform-origin: center;
-    box-shadow: 0 0 5px var(--neon-cyan);
+    box-shadow: none;
   }
 
   &:hover {
-    background: rgba(0, 255, 255, 0.2);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.16);
   }
 }
 
 .hamburger.active {
-  background: rgba(255, 0, 255, 0.1);
-  border-color: var(--neon-magenta);
-  box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
 
   span {
-    background: var(--neon-magenta);
-    box-shadow: 0 0 8px var(--neon-magenta);
+    background: #FF66B3;
+    box-shadow: none;
 
     &:first-child {
       rotate: 45deg;
@@ -325,9 +323,7 @@
     padding: 1rem 1.5rem;
 
     .container {
-      .logo {
-        font-size: 2.2rem;
-      }
+      gap: 1rem;
     }
 
     .hamburger {
@@ -336,86 +332,102 @@
   }
   
   .nav {
-    ul {
-      z-index: 999;
-      position: absolute;
-      top: -500px;
-      left: 50%;
-      translate: -50% 0;
-      flex-direction: column;
-      width: 90%;
-      padding: 2rem;
-      background: rgba(10, 10, 15, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--neon-cyan);
-      border-radius: 1rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
-                  0 0 30px rgba(0, 255, 255, 0.2);
-      transition: top 0.6s ease-in-out;
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-      li {
-        width: 100%;
-        padding: 1.5rem 2rem !important;
-        margin-bottom: 0.5rem;
-      }
+    /* Hide menu items by default on mobile */
+    ul {
+      display: none;
+    }
+    .btns-groups > *:not(.hamburger) {
+      display: none !important;
     }
   }
 
   .nav.active {
+    position: fixed;
+    inset: 0;
+    background: rgba(21, 21, 34, 0.98);
+    backdrop-filter: blur(18px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 7rem;
+    gap: 2rem;
+    overflow-y: auto;
+    padding-bottom: 4rem;
+
     ul {
-      top: 8rem !important;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      width: min(90%, 360px);
+
+      li {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.2rem;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 0.8rem;
+        }
+      }
+    }
+
+    .btns-groups {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: min(90%, 360px);
+      gap: 1rem;
+
+      .hamburger {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.8rem;
+        display: flex !important;
+      }
+
+      > *:not(.hamburger) {
+        display: inline-flex !important;
+      }
+
+      .btn-chat,
+      .btn-login-link,
+      .btn-register,
+      .user-name {
+        justify-content: center;
+        padding: 1.1rem;
+        width: 100%;
+      }
     }
   }
 }
 
 @media (max-width: 499px) {
-  .nav {
-    .btns-groups {
-      /* Hide primary button controls, but allow chat buttons in active dropdown */
-      button {
-        display: none !important;
-      }
-      .btn-chat {
-        display: none;
-      }
-      .btn-login-link,
-      .btn-register {
-        display: none !important;
-      }
-      /* Always show profile link */
-      .user-name {
-        display: inline-flex !important;
-      }
-    }
-  }
-
-  .nav {
-    ul {
-      li {
-        width: 100%;
-      }
-    }
-  }
-
-  /* When mobile menu is open, show the chat links below the menu */
   .nav.active {
+    padding-top: 6rem;
+    ul {
+      width: min(92%, 320px);
+    }
     .btns-groups {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      width: 90%;
-      margin: 0 auto;
+      width: min(92%, 320px);
       gap: 0.8rem;
 
-      .btn-chat {
-        display: inline-flex !important;
-        justify-content: center;
-        width: 100%;
-        padding: 1rem 1.2rem;
-      }
+      .btn-chat,
+      .btn-login-link,
+      .btn-register,
       .user-name {
-        justify-content: center;
-        width: 100%;
+        font-size: 1.3rem;
+        padding: 1rem;
       }
     }
   }

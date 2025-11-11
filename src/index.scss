@@ -16,6 +16,15 @@
   --border: rgba(255, 255, 255, 0.15);
   --brand-gradient: linear-gradient(135deg, #FF66B3 0%, #B388FF 100%);
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  /* Backwards compatibility (legacy tokens referenced elsewhere) */
+  --neon-cyan: var(--color-accent);
+  --neon-magenta: var(--color-highlight);
+  --neon-blue: #6e7cff;
+  --neon-green: #9be7c4;
+  --neon-yellow: #ffe8a3;
+  --neon-pink: var(--color-accent);
+  --neon-purple: var(--color-highlight);
 }
 
 *,
