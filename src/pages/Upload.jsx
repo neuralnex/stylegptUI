@@ -47,17 +47,26 @@ const Upload = () => {
     try {
       const response = await uploadAPI.uploadImages(files);
       if (response.success) {
-        setMessage(`Successfully uploaded ${response.count} item(s)!`);
+        const successMsg = response.failed && response.failed > 0
+          ? `Successfully uploaded ${response.count} item(s)! ${response.failed} item(s) failed.`
+          : `Successfully uploaded ${response.count} item(s)!`;
+        setMessage(successMsg);
         setUploadedItems(response.items || []);
         setFiles([]);
         // Reset file input
         const fileInput = document.getElementById("file-input");
         if (fileInput) fileInput.value = "";
       } else {
-        setMessage(response.error || "Upload failed");
+        setMessage(response.error || "Upload failed. Please try again.");
       }
     } catch (error) {
-      setMessage(error.message || "Upload failed");
+      console.error("Upload error:", error);
+      const errorMsg = error.message?.includes("FashionCLIP") || error.message?.includes("classify")
+        ? "Classification service is temporarily unavailable. Please try again in a moment."
+        : error.message?.includes("timeout")
+        ? "Upload timed out. Please try again with fewer images."
+        : error.message || "Upload failed. Please check your connection and try again.";
+      setMessage(errorMsg);
     } finally {
       setUploading(false);
     }
