@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Upload from "./pages/Upload";
 import Blog from "./pages/Blog";
 import Profile from "./pages/Profile";
+import Wardrobe from "./pages/Wardrobe";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/wardrobe" element={<Wardrobe />} />
       </Routes>
     </AuthProvider>
   );

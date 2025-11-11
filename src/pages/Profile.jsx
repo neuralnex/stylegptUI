@@ -129,6 +129,11 @@ const Profile = () => {
         <div className="profile-header">
           <h1>Profile Settings</h1>
           <p>Manage your account information and profile picture</p>
+          <div className="profile-actions">
+            <button type="button" className="btn-p" onClick={() => navigate("/wardrobe")}>
+              View Wardrobe
+            </button>
+          </div>
         </div>
 
         <form className="profile-form" onSubmit={handleSubmit}>

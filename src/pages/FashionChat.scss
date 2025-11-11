@@ -36,7 +36,8 @@
     padding: 1rem 2rem;
     flex-shrink: 0;
     z-index: 10;
-    position: relative;
+    position: sticky;
+    top: 0;
 
     .top-bar-content {
       max-width: 1200px;
@@ -126,6 +127,7 @@
   }
 
   .messages-area {
+    min-height: 0; /* allow flex child to scroll on mobile */
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -135,6 +137,7 @@
     padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
     background: transparent;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     position: relative;
     z-index: 1;
 
@@ -266,23 +269,23 @@
 
           &.user-container {
             .message-content-wrapper .message-content {
-              background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-              color: var(--bgb);
+              background: var(--color-neutral-light);
+              color: #1E1E2F;
               border-radius: 1.2rem 1.2rem 0 1.2rem;
-              box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-              border: 1px solid var(--neon-cyan);
+              box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+              border: 1px solid rgba(0,0,0,0.06);
               font-weight: 500;
             }
           }
 
           &.ai-container {
             .message-content-wrapper .message-content {
-              background: rgba(0, 255, 255, 0.1);
-              backdrop-filter: blur(10px);
-              color: rgba(255, 255, 255, 0.9);
-              border: 1px solid var(--neon-cyan);
+              background: var(--brand-gradient);
+              backdrop-filter: blur(8px);
+              color: #1b1b28;
+              border: none;
               border-radius: 1.2rem 1.2rem 1.2rem 0;
-              box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+              box-shadow: 0 10px 24px rgba(179, 136, 255, 0.25);
 
               &.loading {
                 .typing-indicator {
@@ -322,6 +325,7 @@
     box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5),
                 0 0 20px rgba(0, 255, 255, 0.1);
     padding: 1.5rem 2rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
     z-index: 10;
     /* Stick to bottom in mobile scroll */
     position: sticky;
@@ -433,6 +437,7 @@
   .fashion-chat-page {
     /* Use dynamic viewport height to avoid iOS 100vh issues */
     height: 100dvh;
+    min-height: 0;
     .chat-top-bar {
       padding: 0.6rem 0.8rem;
       min-height: 45px;
@@ -537,6 +542,7 @@
       border-top: 1px solid var(--border);
       bottom: 0;
       width: 100%;
+      padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
 
       .chat-input-form {
         form {
@@ -647,6 +653,7 @@
 
     .input-area {
       padding: 0.6rem 0.8rem;
+      padding-bottom: calc(0.6rem + env(safe-area-inset-bottom));
 
       .chat-input-form {
         .input-wrapper {
@@ -661,6 +668,23 @@
           font-size: 0.9rem;
         }
       }
+    }
+  }
+}
+
+/* Tablet tweaks (between 769px and 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .fashion-chat-page {
+    height: 100dvh;
+    .messages-area {
+      padding-bottom: 110px;
+    }
+    .input-area {
+      padding: 1.2rem 1.6rem;
+      padding-bottom: calc(1.2rem + env(safe-area-inset-bottom));
+    }
+    .messages-list .message-container {
+      max-width: 90%;
     }
   }
 }

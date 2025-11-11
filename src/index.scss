@@ -1,33 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=Rajdhani:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap");
 
 :root {
-  // Neon Color Palette
-  --neon-cyan: #00ffff;
-  --neon-magenta: #ff00ff;
-  --neon-blue: #0080ff;
-  --neon-green: #00ff41;
-  --neon-yellow: #ffff00;
-  --neon-pink: #ff1493;
-  --neon-purple: #9d00ff;
-  
-  // Background Colors
-  --bgp: var(--neon-cyan);
-  --bgw: #ffffff;
-  --bgb: #0a0a0f;
-  --bgsb: #151520;
-  --bg-card: rgba(21, 21, 32, 0.8);
-  --border: rgba(0, 255, 255, 0.3);
-  --border-glow: rgba(0, 255, 255, 0.6);
-  
-  // Glow Effects
-  --glow-cyan: 0 0 20px rgba(0, 255, 255, 0.5),
-               0 0 40px rgba(0, 255, 255, 0.3),
-               0 0 60px rgba(0, 255, 255, 0.2);
-  --glow-magenta: 0 0 20px rgba(255, 0, 255, 0.5),
-                  0 0 40px rgba(255, 0, 255, 0.3),
-                  0 0 60px rgba(255, 0, 255, 0.2);
-  --glow-blue: 0 0 20px rgba(0, 128, 255, 0.5),
-               0 0 40px rgba(0, 128, 255, 0.3);
+  /* StyleGPT Brand Palette */
+  --color-bg-base: #1E1E2F;         /* Deep Charcoal */
+  --color-accent: #FF66B3;          /* Rose Magenta */
+  --color-secondary: #E0E0E0;       /* Cool Gray (text) */
+  --color-highlight: #B388FF;       /* Lavender Glow */
+  --color-neutral-light: #FAFAFA;   /* Off White */
+
+  /* Derived tokens */
+  --bgb: var(--color-bg-base);
+  --bgw: var(--color-secondary);
+  --bgsb: #23233a;
+  --bg-card: rgba(250, 250, 250, 0.06);
+  --border: rgba(255, 255, 255, 0.15);
+  --brand-gradient: linear-gradient(135deg, #FF66B3 0%, #B388FF 100%);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 *,
@@ -62,8 +50,8 @@ html {
 }
 
 body {
-  font-family: "Exo 2", sans-serif;
-  background: linear-gradient(135deg, #0a0a0f 0%, #151520 50%, #0a0a0f 100%);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--color-bg-base);
   background-attachment: fixed;
   color: var(--bgw);
   overflow-x: hidden;
@@ -78,8 +66,8 @@ body {
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
@@ -101,7 +89,7 @@ body {
 }
 
 p {
-  font-family: "Exo 2", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.4rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.8);
@@ -121,14 +109,13 @@ img {
 }
 
 h1 {
-  font-family: "Orbitron", sans-serif;
+  font-family: "DM Serif Display", serif;
   font-size: 4rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+  font-weight: 600;
+  background: var(--brand-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
   letter-spacing: 1px;
   line-height: 1.2;
 
@@ -142,13 +129,13 @@ h1 {
 }
 
 h2 {
-  font-family: "Orbitron", sans-serif;
+  font-family: "DM Serif Display", serif;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
 h3 {
-  font-family: "Orbitron", sans-serif;
+  font-family: "DM Serif Display", serif;
   font-size: 3rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -164,7 +151,7 @@ button {
   padding: 1rem 2rem;
   background-color: transparent;
   cursor: pointer;
-  font-family: "Exo 2", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -172,18 +159,18 @@ button {
 
 .btn-p {
   font-size: 1.4rem;
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-  color: var(--bgb);
+  background: var(--brand-gradient);
+  color: #1b1b28;
   text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: 1px;
-  border-radius: 0.5rem;
+  letter-spacing: 0.5px;
+  border-radius: 1.2rem;
   padding: 1rem 2rem;
-  box-shadow: var(--glow-cyan);
-  border: 1px solid var(--neon-cyan);
+  box-shadow: var(--shadow-soft);
+  border: none;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
 
   &::before {
@@ -214,8 +201,7 @@ button {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8),
-                0 0 60px rgba(0, 255, 255, 0.4);
+    box-shadow: 0 12px 28px rgba(179, 136, 255, 0.35);
     
     &::before {
       left: 100%;

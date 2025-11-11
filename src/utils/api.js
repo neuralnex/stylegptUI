@@ -115,6 +115,20 @@ export const uploadAPI = {
   },
 };
 
+// Wardrobe API
+export const wardrobeAPI = {
+  list: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.style) query.set("style", params.style);
+    if (params.q) query.set("q", params.q);
+    const qs = query.toString();
+    const response = await fetch(`${API_BASE_URL}/api/wardrobe${qs ? `?${qs}` : ""}`, {
+      method: "GET",
+      headers: authHeaders(),
+    });
+    return await response.json();
+  },
+};
 // Fashion Chat API (without wardrobe - Milestone 1)
 export const fashionChatAPI = {
   sendMessage: async (message, sessionId, retryCount = 0) => {
