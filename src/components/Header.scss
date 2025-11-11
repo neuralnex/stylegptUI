@@ -386,11 +386,12 @@
 @media (max-width: 499px) {
   .nav {
     .btns-groups {
+      /* Hide primary button controls, but allow chat buttons in active dropdown */
       button {
         display: none !important;
       }
       .btn-chat {
-        display: none !important;
+        display: none;
       }
     }
   }
@@ -399,6 +400,25 @@
     ul {
       li {
         width: 100%;
+      }
+    }
+  }
+
+  /* When mobile menu is open, show the chat links below the menu */
+  .nav.active {
+    .btns-groups {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 90%;
+      margin: 0 auto;
+      gap: 0.8rem;
+
+      .btn-chat {
+        display: inline-flex !important;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem 1.2rem;
       }
     }
   }

@@ -131,6 +131,8 @@
     overflow-x: hidden;
     width: 100%;
     padding: 0;
+    /* Keep space for the input bar on mobile so it doesn't cover last messages */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
     background: transparent;
     -webkit-overflow-scrolling: touch;
     position: relative;
@@ -321,7 +323,10 @@
                 0 0 20px rgba(0, 255, 255, 0.1);
     padding: 1.5rem 2rem;
     z-index: 10;
-    position: relative;
+    /* Stick to bottom in mobile scroll */
+    position: sticky;
+    bottom: 0;
+    width: 100%;
 
     .chat-input-form {
       max-width: 1200px;
@@ -426,6 +431,8 @@
 
 @media (max-width: 768px) {
   .fashion-chat-page {
+    /* Use dynamic viewport height to avoid iOS 100vh issues */
+    height: 100dvh;
     .chat-top-bar {
       padding: 0.6rem 0.8rem;
       min-height: 45px;
@@ -467,6 +474,7 @@
     }
 
     .messages-area {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
       .empty-state {
         padding: 1rem;
         min-height: auto;
@@ -527,6 +535,8 @@
     .input-area {
       padding: 0.8rem 1rem;
       border-top: 1px solid var(--border);
+      bottom: 0;
+      width: 100%;
 
       .chat-input-form {
         form {
@@ -592,6 +602,7 @@
     }
 
     .messages-area {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 90px);
       .empty-state {
         padding: 0.8rem;
 
