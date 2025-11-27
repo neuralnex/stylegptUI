@@ -84,13 +84,6 @@ const Wardrobe = () => {
               <h1>Your Wardrobe</h1>
               <p>Browse all items you've uploaded. Use filters to find things quicker.</p>
             </div>
-            <button 
-              className="btn-3d" 
-              onClick={() => navigate("/wardrobe-3d")}
-              title="View in 3D"
-            >
-              🎨 3D View
-            </button>
           </div>
           <form className="filters" onSubmit={handleSearch}>
             <input

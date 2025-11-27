@@ -1,24 +1,11 @@
 .hero {
-  padding: 2rem;
+  padding: 4rem 2rem;
   width: 100%;
   height: 100%;
   margin-top: 0;
   position: relative;
   overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(77, 168, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(164, 92, 255, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 1;
-  }
+  background: var(--porcelain-white);
 
   p {
     color: rgba(255, 255, 255, 0.9);
@@ -28,35 +15,14 @@
     width: 100%;
     height: 100%;
     min-height: calc(100vh - 85px);
-    border-radius: 1rem;
+    border-radius: 0;
     position: relative;
     margin-top: 0;
-    background: var(--deep-space-black);
-    border: 1px solid rgba(77, 168, 255, 0.3);
-    box-shadow: 
-      0 0 50px rgba(77, 168, 255, 0.1),
-      inset 0 0 50px rgba(77, 168, 255, 0.05);
+    background: var(--porcelain-white);
+    border: none;
+    box-shadow: none;
     overflow: hidden;
     z-index: 2;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(77, 168, 255, 0.03) 2px,
-          rgba(77, 168, 255, 0.03) 4px
-        );
-      animation: scan 20s linear infinite;
-      pointer-events: none;
-    }
 
     .text {
       position: absolute;
@@ -67,45 +33,25 @@
       padding-right: 1rem;
 
       h1 {
-        font-family: "Orbitron", "Space Grotesk", sans-serif;
+        font-family: "Playfair Display", "Cormorant Garamond", serif;
         font-size: 6rem;
-        line-height: 1.1;
+        line-height: 1.2;
         font-weight: 300;
         margin-bottom: 1.5rem;
-        background: var(--holographic-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 
-          0 0 30px rgba(77, 168, 255, 0.5),
-          0 0 60px rgba(164, 92, 255, 0.3);
+        color: var(--charcoal);
         letter-spacing: 0.02em;
         position: relative;
-        animation: glowPulse 3s ease-in-out infinite;
         word-wrap: break-word;
         overflow-wrap: break-word;
-
-        &::after {
-          content: "";
-          position: absolute;
-          bottom: -8px;
-          left: 0;
-          width: 100%;
-          height: 3px;
-          background: var(--holographic-gradient);
-          box-shadow: 0 0 20px var(--cyber-blue);
-          animation: lineGlow 2s ease-in-out infinite;
-        }
       }
 
       p {
         font-size: 1.5rem;
         max-width: 900px;
-        line-height: 1.6;
-        color: var(--plasma-white);
+        line-height: 1.8;
+        color: var(--charcoal);
         font-family: "Inter", sans-serif;
         font-weight: 300;
-        text-shadow: 0 0 10px rgba(77, 168, 255, 0.2);
         margin-bottom: 1.5rem;
       }
 
@@ -151,11 +97,11 @@
             }
 
             &:hover {
-              transform: translateY(-3px);
-              box-shadow: 0 0 30px rgba(77, 168, 255, 0.8);
+              background: rgba(26, 26, 26, 0.1);
+              transform: none;
 
               &::before {
-                left: 100%;
+                display: none;
               }
             }
           }
@@ -169,32 +115,15 @@
   }
 }
 
-@keyframes scan {
-  0% {
-    transform: translate(0, 0);
+// Minimal fade-in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  100% {
-    transform: translate(0, 100px);
-  }
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(77, 168, 255, 0.5));
-  }
-  50% {
-    filter: drop-shadow(0 0 40px rgba(77, 168, 255, 0.8));
-  }
-}
-
-@keyframes lineGlow {
-  0%, 100% {
+  to {
     opacity: 1;
-    box-shadow: 0 0 20px var(--cyber-blue);
-  }
-  50% {
-    opacity: 0.7;
-    box-shadow: 0 0 40px var(--cyber-blue), 0 0 60px var(--neon-violet);
+    transform: translateY(0);
   }
 }
 

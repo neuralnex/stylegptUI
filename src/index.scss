@@ -1,49 +1,44 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap");
 
 :root {
-  /* 🌐 TECH COUTURE UI THEME - Color System */
+  /* ✨ MINIMAL LUXE - Color System */
   
-  /* Core Colors */
-  --deep-space-black: #0A0A0F;
-  --soft-graphite: #1E1F26;
-  --plasma-white: #F1F3F9;
+  /* Primary Colors */
+  --porcelain-white: #FFFFFF;
+  --soft-cream: #FAF6F1;
+  --charcoal: #1A1A1A;
   
-  /* Metallics */
-  --chrome-silver: #C8D6F7;
-  --liquid-steel: #A0A6B8;
+  /* Accents */
+  --warm-nude: #DCC4A4;
+  --soft-gold: #C2A878;
   
-  /* Neon Accents */
-  --cyber-blue: #4DA8FF;
-  --neon-violet: #A45CFF;
-  --holo-pink: #FF6FD8;
-  
-  /* Gradients */
-  --holographic-gradient: linear-gradient(135deg, #C8D6F7 0%, #4DA8FF 35%, #A45CFF 70%, #FF6FD8 100%);
-  --chrome-gradient: linear-gradient(180deg, #1E1F26 0%, #A0A6B8 100%);
+  /* Functional */
+  --line-grey: #E6E6E6;
+  --shadow-light: rgba(0, 0, 0, 0.04);
   
   /* Legacy compatibility */
-  --color-bg-base: var(--deep-space-black);
-  --color-secondary: var(--plasma-white);
-  --color-highlight: var(--neon-violet);
-  --color-accent: var(--cyber-blue);
-  --color-neutral-light: var(--plasma-white);
+  --color-bg-base: var(--porcelain-white);
+  --color-secondary: var(--charcoal);
+  --color-highlight: var(--warm-nude);
+  --color-accent: var(--soft-gold);
+  --color-neutral-light: var(--soft-cream);
   
-  --bgb: var(--deep-space-black);
-  --bgw: var(--plasma-white);
-  --bgsb: var(--soft-graphite);
-  --bg-card: rgba(200, 214, 247, 0.06);
-  --border: rgba(77, 168, 255, 0.3);
-  --brand-gradient: var(--holographic-gradient);
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --bgb: var(--porcelain-white);
+  --bgw: var(--charcoal);
+  --bgsb: var(--soft-cream);
+  --bg-card: var(--porcelain-white);
+  --border: var(--line-grey);
+  --brand-gradient: none;
+  --shadow-soft: 0 2px 8px var(--shadow-light);
   
-  /* Legacy neon colors for compatibility */
-  --neon-cyan: var(--cyber-blue);
-  --neon-magenta: var(--neon-violet);
-  --neon-blue: var(--cyber-blue);
-  --neon-green: #9be7c4;
-  --neon-yellow: #ffe8a3;
-  --neon-pink: var(--holo-pink);
-  --neon-purple: var(--neon-violet);
+  /* Legacy compatibility - neutralized */
+  --neon-cyan: var(--charcoal);
+  --neon-magenta: var(--charcoal);
+  --neon-blue: var(--charcoal);
+  --neon-green: var(--charcoal);
+  --neon-yellow: var(--charcoal);
+  --neon-pink: var(--charcoal);
+  --neon-purple: var(--charcoal);
 }
 
 *,
@@ -60,53 +55,43 @@
 html {
   font-size: 62.5%;
   scrollbar-width: thin;
-  scrollbar-color: var(--cyber-blue) var(--deep-space-black);
+  scrollbar-color: var(--line-grey) var(--porcelain-white);
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--deep-space-black);
+    background: var(--porcelain-white);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--cyber-blue);
-    border-radius: 4px;
-    box-shadow: 0 0 10px var(--cyber-blue);
+    background: var(--line-grey);
+    border-radius: 0;
   }
 }
 
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background: var(--deep-space-black);
+  background: var(--porcelain-white);
   background-attachment: fixed;
-  color: var(--plasma-white);
+  color: var(--charcoal);
   overflow-x: hidden;
   position: relative;
   font-weight: 300;
-  
-  // Tech Couture neon grid background
-  &::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      linear-gradient(rgba(77, 168, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(77, 168, 255, 0.05) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-    animation: gridMove 20s linear infinite;
-  }
+  line-height: 1.6;
 }
 
-@keyframes gridMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
+// Minimal fade-in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .home-page {
@@ -115,13 +100,14 @@ body {
   max-width: 100vw;
   position: relative;
   z-index: 1;
+  background: var(--porcelain-white);
 }
 
 p {
   font-family: "Inter", sans-serif;
   font-size: 1.4rem;
-  line-height: 1.6;
-  color: var(--plasma-white);
+  line-height: 1.8;
+  color: var(--charcoal);
   font-weight: 300;
 }
 
@@ -139,15 +125,12 @@ img {
 }
 
 h1 {
-  font-family: "Orbitron", "Space Grotesk", sans-serif;
+  font-family: "Playfair Display", "Cormorant Garamond", serif;
   font-size: 4rem;
   font-weight: 300;
-  background: var(--holographic-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.02em; /* +2% */
-  line-height: 1.2;
+  color: var(--charcoal);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
 
   @media (max-width: 768px) {
     font-size: 3rem;
@@ -159,16 +142,18 @@ h1 {
 }
 
 h2 {
-  font-family: "Orbitron", "Space Grotesk", sans-serif;
+  font-family: "Playfair Display", "Cormorant Garamond", serif;
   font-weight: 300;
   letter-spacing: 0.02em;
+  color: var(--charcoal);
 }
 
 h3 {
-  font-family: "Orbitron", "Space Grotesk", sans-serif;
+  font-family: "Playfair Display", "Cormorant Garamond", serif;
   font-size: 3rem;
   font-weight: 300;
   letter-spacing: 0.02em;
+  color: var(--charcoal);
 }
 
 li {
@@ -187,35 +172,22 @@ button {
   overflow: hidden;
 }
 
-/* Primary Button - Holographic Gradient */
+/* Primary Button - Minimal Border Only */
 .btn-p {
   font-size: 1.4rem;
-  background: var(--holographic-gradient);
-  color: var(--deep-space-black);
+  background: var(--porcelain-white);
+  color: var(--charcoal);
   text-transform: none;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  border-radius: 14px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  border-radius: 0;
   padding: 1rem 2rem;
-  box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
-  border: none;
+  box-shadow: none;
+  border: 1px solid var(--charcoal);
   position: relative;
-  overflow: hidden;
   transition: all 0.3s ease;
   white-space: nowrap;
-  font-family: "Space Grotesk", sans-serif;
-
-  /* Metallic shimmer sweep animation */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(200, 214, 247, 0.4), transparent);
-    transition: left 0.6s;
-  }
+  font-family: "Inter", sans-serif;
 
   &-big {
     font-size: 1.5rem;
@@ -234,22 +206,18 @@ button {
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(77, 168, 255, 0.7);
-    
-    &::before {
-      left: 100%;
-    }
+    background: rgba(26, 26, 26, 0.1);
+    transform: none;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 .CircleIco {
-  background: rgba(77, 168, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: transparent;
+  backdrop-filter: none;
   border-radius: 50%;
   overflow: hidden;
   width: 39px;
@@ -257,15 +225,15 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--cyber-blue);
-  box-shadow: 0 0 15px rgba(77, 168, 255, 0.3);
+  border: 1px solid var(--charcoal);
+  box-shadow: none;
   transition: all 0.3s ease;
 
   svg {
     margin-top: 6px;
     width: 30px;
-    fill: var(--cyber-blue);
-    filter: drop-shadow(0 0 5px var(--cyber-blue));
+    fill: var(--charcoal);
+    filter: none;
     transition: all 0.3s ease;
 
     &:first-child {
@@ -274,29 +242,33 @@ button {
   }
 
   &:hover {
-    box-shadow: 0 0 25px rgba(77, 168, 255, 0.6);
-    transform: scale(1.05);
+    border-color: var(--warm-nude);
+    transform: none;
+    
+    svg {
+      fill: var(--warm-nude);
+    }
   }
 }
 
-/* Secondary Button - Chrome background with neon outline */
+/* Secondary Button - Ghost (No Border) */
 .btn-s {
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
   font-size: 1.8rem;
-  text-transform: none;
+  text-transform: uppercase;
   gap: 1rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
   cursor: pointer;
-  color: var(--cyber-blue);
-  font-weight: 500;
+  color: var(--charcoal);
+  font-weight: 300;
   transition: all 0.3s ease;
-  background: var(--chrome-gradient);
-  border: 1px solid var(--cyber-blue);
-  border-radius: 14px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 1rem 2rem;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   &-90 {
     .CircleIco {
@@ -310,9 +282,7 @@ button {
   }
 
   &:hover {
-    color: var(--neon-violet);
-    border-color: var(--neon-violet);
-    box-shadow: 0 0 15px rgba(164, 92, 255, 0.5);
+    color: var(--warm-nude);
     
     .CircleIco {
       svg {
@@ -324,29 +294,27 @@ button {
   }
 }
 
-// Neon text effect utility
-.neon-text {
-  color: var(--cyber-blue);
-  text-shadow: 
-    0 0 10px var(--cyber-blue),
-    0 0 20px var(--cyber-blue),
-    0 0 30px var(--cyber-blue);
+// Minimal text utilities
+.editorial-text {
+  font-family: "Playfair Display", "Cormorant Garamond", serif;
+  color: var(--charcoal);
+  font-weight: 300;
 }
 
-.neon-text-magenta {
-  color: var(--neon-violet);
-  text-shadow: 
-    0 0 10px var(--neon-violet),
-    0 0 20px var(--neon-violet),
-    0 0 30px var(--neon-violet);
+.label-text {
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 300;
+  color: var(--charcoal);
 }
 
-// Glass morphism effect - Frosted glass with chrome border
+// Minimal card effect
 .glass {
-  background: rgba(30, 31, 38, 0.6);
-  backdrop-filter: blur(15px);
-  border: 1px solid var(--chrome-silver);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(200, 214, 247, 0.1);
+  background: var(--porcelain-white);
+  backdrop-filter: none;
+  border: 1px solid var(--line-grey);
+  box-shadow: 0 2px 8px var(--shadow-light);
 }
 
 // Animated border

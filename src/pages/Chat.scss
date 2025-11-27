@@ -1,23 +1,8 @@
 .chat-page {
   min-height: 100vh;
-  background-color: var(--deep-space-black);
+  background-color: var(--porcelain-white);
   position: relative;
-
-  &::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      linear-gradient(rgba(77, 168, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(77, 168, 255, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-    animation: gridMove 20s linear infinite;
-  }
+}
 
   .chat-container {
     max-width: 900px;
@@ -37,20 +22,18 @@
       h1 {
         font-size: 4rem;
         margin-bottom: 1rem;
-        font-family: "Orbitron", "Space Grotesk", sans-serif;
+        font-family: "Playfair Display", "Cormorant Garamond", serif;
         font-weight: 300;
-        background: var(--holographic-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--charcoal);
         letter-spacing: 0.02em;
       }
 
       p {
         font-size: 1.6rem;
-        color: var(--chrome-silver);
+        color: var(--charcoal);
         font-family: "Inter", sans-serif;
         font-weight: 300;
+        opacity: 0.7;
       }
     }
 
@@ -58,15 +41,15 @@
       flex: 1;
       overflow-y: auto;
       padding: 2rem;
-      background-color: var(--soft-graphite);
-      backdrop-filter: blur(15px);
-      border-radius: 1rem;
+      background-color: var(--porcelain-white);
+      backdrop-filter: none;
+      border-radius: 0;
       margin-bottom: 2rem;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      border: 1px solid var(--chrome-silver);
-      box-shadow: 0 0 20px rgba(77, 168, 255, 0.1), inset 0 0 20px rgba(200, 214, 247, 0.05);
+      border: 1px solid var(--line-grey);
+      box-shadow: none;
 
       &::-webkit-scrollbar {
         width: 8px;
@@ -93,9 +76,10 @@
 
         p {
           font-size: 1.6rem;
-          color: var(--chrome-silver);
+          color: var(--charcoal);
           font-family: "Inter", sans-serif;
           font-weight: 300;
+          opacity: 0.7;
         }
       }
 
@@ -110,14 +94,14 @@
           align-items: flex-end;
 
           .message-content {
-            background-color: var(--soft-graphite);
-            color: var(--plasma-white);
+            background-color: var(--porcelain-white);
+            color: var(--charcoal);
             padding: 1.2rem 1.5rem;
-            border-radius: 1rem 1rem 0 1rem;
+            border-radius: 0;
             font-size: 1.5rem;
-            line-height: 1.5;
-            border: 1px solid var(--chrome-silver);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            line-height: 1.8;
+            border: 1px solid var(--charcoal);
+            box-shadow: none;
             font-family: "Inter", sans-serif;
             font-weight: 300;
           }
@@ -128,16 +112,15 @@
           align-items: flex-start;
 
           .message-content {
-            background-color: var(--soft-graphite);
-            backdrop-filter: blur(10px);
-            color: var(--chrome-silver);
+            background-color: var(--soft-cream);
+            backdrop-filter: none;
+            color: var(--charcoal);
             padding: 1.2rem 1.5rem;
-            border-radius: 1rem 1rem 1rem 0;
+            border-radius: 0;
             font-size: 1.5rem;
-            line-height: 1.5;
-            border-left: 4px solid;
-            border-image: var(--holographic-gradient) 1;
-            box-shadow: 0 10px 24px rgba(77, 168, 255, 0.2), inset 0 0 20px rgba(77, 168, 255, 0.05);
+            line-height: 1.8;
+            border: 1px solid var(--line-grey);
+            box-shadow: none;
             font-family: "Inter", sans-serif;
             font-weight: 300;
           }
@@ -152,10 +135,11 @@
 
         .message-time {
           font-size: 1.2rem;
-          color: var(--liquid-steel);
+          color: var(--charcoal);
           padding: 0 0.5rem;
-          font-family: "JetBrains Mono", monospace;
+          font-family: "Inter", sans-serif;
           font-weight: 300;
+          opacity: 0.5;
         }
       }
     }
@@ -167,29 +151,30 @@
 
       input {
         flex: 1;
-        padding: 1.2rem 1.5rem;
-        background-color: var(--soft-graphite);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(77, 168, 255, 0.3);
-        border-radius: 1.5rem;
-        color: var(--plasma-white);
+        padding: 1.2rem 0;
+        background-color: transparent;
+        backdrop-filter: none;
+        border: none;
+        border-bottom: 1px solid var(--line-grey);
+        border-radius: 0;
+        color: var(--charcoal);
         font-size: 1.5rem;
         font-family: "Inter", sans-serif;
         font-weight: 300;
         outline: none;
         transition: all 0.3s;
-        box-shadow: 0 0 15px rgba(77, 168, 255, 0.1);
+        box-shadow: none;
 
         &:focus {
-          border-color: var(--cyber-blue);
-          box-shadow: 0 0 25px rgba(77, 168, 255, 0.4);
-          background: rgba(77, 168, 255, 0.1);
+          border-bottom-width: 2px;
+          border-bottom-color: var(--charcoal);
         }
 
         &::placeholder {
-          color: var(--cyber-blue);
-          font-family: "JetBrains Mono", monospace;
-          opacity: 0.6;
+          color: var(--charcoal);
+          font-family: "Playfair Display", "Cormorant Garamond", serif;
+          opacity: 0.4;
+          font-style: italic;
         }
 
         &:disabled {
@@ -200,19 +185,21 @@
 
       button {
         white-space: nowrap;
-        background: var(--holographic-gradient);
-        border: none;
-        border-radius: 14px;
+        background: transparent;
+        border: 1px solid var(--charcoal);
+        border-radius: 0;
         padding: 1.2rem 2rem;
-        color: var(--deep-space-black);
-        font-family: "Space Grotesk", sans-serif;
-        font-weight: 500;
-        box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
+        color: var(--charcoal);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        box-shadow: none;
         transition: all 0.3s;
 
         &:hover:not(:disabled) {
-          box-shadow: 0 0 15px rgba(77, 168, 255, 0.7);
-          transform: translateY(-2px);
+          background: rgba(26, 26, 26, 0.1);
+          transform: none;
         }
 
         &:disabled {
@@ -224,10 +211,7 @@
   }
 }
 
-@keyframes gridMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
-}
+// Minimal animations removed
 
 @media (max-width: 768px) {
   .chat-page {
