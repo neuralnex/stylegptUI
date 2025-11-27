@@ -98,7 +98,7 @@ const Wardrobe3D = () => {
     }
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1a2e);
+    scene.background = new THREE.Color(0x0a0a0f); // Deep Space Black
     sceneRef.current = scene;
 
     const width = mountRef.current.clientWidth;

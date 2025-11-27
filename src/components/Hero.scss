@@ -14,8 +14,8 @@
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 20% 50%, rgba(77, 168, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(164, 92, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
   }
@@ -31,11 +31,11 @@
     border-radius: 1rem;
     position: relative;
     margin-top: 0;
-    background: linear-gradient(135deg, rgba(10, 10, 15, 0.9), rgba(21, 21, 32, 0.9));
-    border: 1px solid var(--border);
+    background: var(--deep-space-black);
+    border: 1px solid rgba(77, 168, 255, 0.3);
     box-shadow: 
-      0 0 50px rgba(0, 255, 255, 0.1),
-      inset 0 0 50px rgba(0, 255, 255, 0.05);
+      0 0 50px rgba(77, 168, 255, 0.1),
+      inset 0 0 50px rgba(77, 168, 255, 0.05);
     overflow: hidden;
     z-index: 2;
 
@@ -51,8 +51,8 @@
           0deg,
           transparent,
           transparent 2px,
-          rgba(0, 255, 255, 0.03) 2px,
-          rgba(0, 255, 255, 0.03) 4px
+          rgba(77, 168, 255, 0.03) 2px,
+          rgba(77, 168, 255, 0.03) 4px
         );
       animation: scan 20s linear infinite;
       pointer-events: none;
@@ -67,19 +67,19 @@
       padding-right: 1rem;
 
       h1 {
-        font-family: "Orbitron", sans-serif;
+        font-family: "Orbitron", "Space Grotesk", sans-serif;
         font-size: 6rem;
         line-height: 1.1;
-        font-weight: 800;
+        font-weight: 300;
         margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta), var(--neon-blue));
+        background: var(--holographic-gradient);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         text-shadow: 
-          0 0 30px rgba(0, 255, 255, 0.5),
-          0 0 60px rgba(255, 0, 255, 0.3);
-        letter-spacing: 2px;
+          0 0 30px rgba(77, 168, 255, 0.5),
+          0 0 60px rgba(164, 92, 255, 0.3);
+        letter-spacing: 0.02em;
         position: relative;
         animation: glowPulse 3s ease-in-out infinite;
         word-wrap: break-word;
@@ -92,8 +92,8 @@
           left: 0;
           width: 100%;
           height: 3px;
-          background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
-          box-shadow: 0 0 20px var(--neon-cyan);
+          background: var(--holographic-gradient);
+          box-shadow: 0 0 20px var(--cyber-blue);
           animation: lineGlow 2s ease-in-out infinite;
         }
       }
@@ -102,8 +102,10 @@
         font-size: 1.5rem;
         max-width: 900px;
         line-height: 1.6;
-        color: rgba(255, 255, 255, 0.85);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        color: var(--plasma-white);
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        text-shadow: 0 0 10px rgba(77, 168, 255, 0.2);
         margin-bottom: 1.5rem;
       }
 
@@ -150,7 +152,7 @@
 
             &:hover {
               transform: translateY(-3px);
-              box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+              box-shadow: 0 0 30px rgba(77, 168, 255, 0.8);
 
               &::before {
                 left: 100%;
@@ -178,21 +180,21 @@
 
 @keyframes glowPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+    filter: drop-shadow(0 0 20px rgba(77, 168, 255, 0.5));
   }
   50% {
-    filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8));
+    filter: drop-shadow(0 0 40px rgba(77, 168, 255, 0.8));
   }
 }
 
 @keyframes lineGlow {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 20px var(--neon-cyan);
+    box-shadow: 0 0 20px var(--cyber-blue);
   }
   50% {
     opacity: 0.7;
-    box-shadow: 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-magenta);
+    box-shadow: 0 0 40px var(--cyber-blue), 0 0 60px var(--neon-violet);
   }
 }
 

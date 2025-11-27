@@ -1,6 +1,23 @@
 .chat-page {
   min-height: 100vh;
-  background-color: var(--bgb);
+  background-color: var(--deep-space-black);
+  position: relative;
+
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(77, 168, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77, 168, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
 
   .chat-container {
     max-width: 900px;
@@ -9,6 +26,8 @@
     display: flex;
     flex-direction: column;
     height: calc(100vh - 85px);
+    position: relative;
+    z-index: 1;
 
     .chat-header {
       text-align: center;
@@ -18,11 +37,20 @@
       h1 {
         font-size: 4rem;
         margin-bottom: 1rem;
+        font-family: "Orbitron", "Space Grotesk", sans-serif;
+        font-weight: 300;
+        background: var(--holographic-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 0.02em;
       }
 
       p {
         font-size: 1.6rem;
-        color: #9e9d9a;
+        color: var(--chrome-silver);
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
       }
     }
 
@@ -30,12 +58,29 @@
       flex: 1;
       overflow-y: auto;
       padding: 2rem;
-      background-color: var(--bgsb);
+      background-color: var(--soft-graphite);
+      backdrop-filter: blur(15px);
       border-radius: 1rem;
       margin-bottom: 2rem;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      border: 1px solid var(--chrome-silver);
+      box-shadow: 0 0 20px rgba(77, 168, 255, 0.1), inset 0 0 20px rgba(200, 214, 247, 0.05);
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--deep-space-black);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--cyber-blue);
+        border-radius: 4px;
+        box-shadow: 0 0 10px var(--cyber-blue);
+      }
 
       .empty-state {
         display: flex;
@@ -48,7 +93,9 @@
 
         p {
           font-size: 1.6rem;
-          color: #9e9d9a;
+          color: var(--chrome-silver);
+          font-family: "Inter", sans-serif;
+          font-weight: 300;
         }
       }
 
@@ -63,12 +110,16 @@
           align-items: flex-end;
 
           .message-content {
-            background-color: var(--bgp);
-            color: var(--bgb);
+            background-color: var(--soft-graphite);
+            color: var(--plasma-white);
             padding: 1.2rem 1.5rem;
             border-radius: 1rem 1rem 0 1rem;
             font-size: 1.5rem;
             line-height: 1.5;
+            border: 1px solid var(--chrome-silver);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            font-family: "Inter", sans-serif;
+            font-weight: 300;
           }
         }
 
@@ -77,13 +128,18 @@
           align-items: flex-start;
 
           .message-content {
-            background-color: var(--bgb);
-            color: var(--bgw);
+            background-color: var(--soft-graphite);
+            backdrop-filter: blur(10px);
+            color: var(--chrome-silver);
             padding: 1.2rem 1.5rem;
             border-radius: 1rem 1rem 1rem 0;
             font-size: 1.5rem;
             line-height: 1.5;
-            border: 1px solid var(--border);
+            border-left: 4px solid;
+            border-image: var(--holographic-gradient) 1;
+            box-shadow: 0 10px 24px rgba(77, 168, 255, 0.2), inset 0 0 20px rgba(77, 168, 255, 0.05);
+            font-family: "Inter", sans-serif;
+            font-weight: 300;
           }
 
           &.loading {
@@ -96,8 +152,10 @@
 
         .message-time {
           font-size: 1.2rem;
-          color: #9e9d9a;
+          color: var(--liquid-steel);
           padding: 0 0.5rem;
+          font-family: "JetBrains Mono", monospace;
+          font-weight: 300;
         }
       }
     }
@@ -110,21 +168,28 @@
       input {
         flex: 1;
         padding: 1.2rem 1.5rem;
-        background-color: var(--bgsb);
-        border: 1px solid var(--border);
-        border-radius: 0.5rem;
-        color: var(--bgw);
+        background-color: var(--soft-graphite);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(77, 168, 255, 0.3);
+        border-radius: 1.5rem;
+        color: var(--plasma-white);
         font-size: 1.5rem;
-        font-family: "Roboto Mono", monospace;
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
         outline: none;
-        transition: border-color 0.3s;
+        transition: all 0.3s;
+        box-shadow: 0 0 15px rgba(77, 168, 255, 0.1);
 
         &:focus {
-          border-color: var(--bgp);
+          border-color: var(--cyber-blue);
+          box-shadow: 0 0 25px rgba(77, 168, 255, 0.4);
+          background: rgba(77, 168, 255, 0.1);
         }
 
         &::placeholder {
-          color: #9e9d9a;
+          color: var(--cyber-blue);
+          font-family: "JetBrains Mono", monospace;
+          opacity: 0.6;
         }
 
         &:disabled {
@@ -135,6 +200,20 @@
 
       button {
         white-space: nowrap;
+        background: var(--holographic-gradient);
+        border: none;
+        border-radius: 14px;
+        padding: 1.2rem 2rem;
+        color: var(--deep-space-black);
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 500;
+        box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
+        transition: all 0.3s;
+
+        &:hover:not(:disabled) {
+          box-shadow: 0 0 15px rgba(77, 168, 255, 0.7);
+          transform: translateY(-2px);
+        }
 
         &:disabled {
           opacity: 0.5;
@@ -143,6 +222,11 @@
       }
     }
   }
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
 }
 
 @media (max-width: 768px) {
@@ -154,6 +238,10 @@
       .chat-header {
         h1 {
           font-size: 3rem;
+        }
+
+        p {
+          font-size: 1.4rem;
         }
       }
 
@@ -175,6 +263,7 @@
 
         input {
           width: 100%;
+          font-size: 1.4rem;
         }
 
         button {

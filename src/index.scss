@@ -1,30 +1,49 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap");
 
 :root {
-  /* StyleGPT Brand Palette */
-  --color-bg-base: #1E1E2F;         /* Deep Charcoal */
-  --color-accent: #FF66B3;          /* Rose Magenta */
-  --color-secondary: #E0E0E0;       /* Cool Gray (text) */
-  --color-highlight: #B388FF;       /* Lavender Glow */
-  --color-neutral-light: #FAFAFA;   /* Off White */
-
-  /* Derived tokens */
-  --bgb: var(--color-bg-base);
-  --bgw: var(--color-secondary);
-  --bgsb: #23233a;
-  --bg-card: rgba(250, 250, 250, 0.06);
-  --border: rgba(255, 255, 255, 0.15);
-  --brand-gradient: linear-gradient(135deg, #FF66B3 0%, #B388FF 100%);
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
-
-  /* Backwards compatibility (legacy tokens referenced elsewhere) */
-  --neon-cyan: var(--color-accent);
-  --neon-magenta: var(--color-highlight);
-  --neon-blue: #6e7cff;
+  /* 🌐 TECH COUTURE UI THEME - Color System */
+  
+  /* Core Colors */
+  --deep-space-black: #0A0A0F;
+  --soft-graphite: #1E1F26;
+  --plasma-white: #F1F3F9;
+  
+  /* Metallics */
+  --chrome-silver: #C8D6F7;
+  --liquid-steel: #A0A6B8;
+  
+  /* Neon Accents */
+  --cyber-blue: #4DA8FF;
+  --neon-violet: #A45CFF;
+  --holo-pink: #FF6FD8;
+  
+  /* Gradients */
+  --holographic-gradient: linear-gradient(135deg, #C8D6F7 0%, #4DA8FF 35%, #A45CFF 70%, #FF6FD8 100%);
+  --chrome-gradient: linear-gradient(180deg, #1E1F26 0%, #A0A6B8 100%);
+  
+  /* Legacy compatibility */
+  --color-bg-base: var(--deep-space-black);
+  --color-secondary: var(--plasma-white);
+  --color-highlight: var(--neon-violet);
+  --color-accent: var(--cyber-blue);
+  --color-neutral-light: var(--plasma-white);
+  
+  --bgb: var(--deep-space-black);
+  --bgw: var(--plasma-white);
+  --bgsb: var(--soft-graphite);
+  --bg-card: rgba(200, 214, 247, 0.06);
+  --border: rgba(77, 168, 255, 0.3);
+  --brand-gradient: var(--holographic-gradient);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+  
+  /* Legacy neon colors for compatibility */
+  --neon-cyan: var(--cyber-blue);
+  --neon-magenta: var(--neon-violet);
+  --neon-blue: var(--cyber-blue);
   --neon-green: #9be7c4;
   --neon-yellow: #ffe8a3;
-  --neon-pink: var(--color-accent);
-  --neon-purple: var(--color-highlight);
+  --neon-pink: var(--holo-pink);
+  --neon-purple: var(--neon-violet);
 }
 
 *,
@@ -41,32 +60,33 @@
 html {
   font-size: 62.5%;
   scrollbar-width: thin;
-  scrollbar-color: var(--neon-cyan) var(--bgb);
+  scrollbar-color: var(--cyber-blue) var(--deep-space-black);
 
   &::-webkit-scrollbar {
     width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--bgb);
+    background: var(--deep-space-black);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--neon-cyan);
+    background: var(--cyber-blue);
     border-radius: 4px;
-    box-shadow: 0 0 10px var(--neon-cyan);
+    box-shadow: 0 0 10px var(--cyber-blue);
   }
 }
 
 body {
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: var(--color-bg-base);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--deep-space-black);
   background-attachment: fixed;
-  color: var(--bgw);
+  color: var(--plasma-white);
   overflow-x: hidden;
   position: relative;
+  font-weight: 300;
   
-  // Animated background grid
+  // Tech Couture neon grid background
   &::before {
     content: "";
     position: fixed;
@@ -75,8 +95,8 @@ body {
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(77, 168, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77, 168, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
@@ -101,7 +121,8 @@ p {
   font-family: "Inter", sans-serif;
   font-size: 1.4rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--plasma-white);
+  font-weight: 300;
 }
 
 a {
@@ -118,14 +139,14 @@ img {
 }
 
 h1 {
-  font-family: "DM Serif Display", serif;
+  font-family: "Orbitron", "Space Grotesk", sans-serif;
   font-size: 4rem;
-  font-weight: 600;
-  background: var(--brand-gradient);
+  font-weight: 300;
+  background: var(--holographic-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 1px;
+  letter-spacing: 0.02em; /* +2% */
   line-height: 1.2;
 
   @media (max-width: 768px) {
@@ -138,16 +159,16 @@ h1 {
 }
 
 h2 {
-  font-family: "DM Serif Display", serif;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-family: "Orbitron", "Space Grotesk", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
 h3 {
-  font-family: "DM Serif Display", serif;
+  font-family: "Orbitron", "Space Grotesk", sans-serif;
   font-size: 3rem;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
 li {
@@ -160,28 +181,31 @@ button {
   padding: 1rem 2rem;
   background-color: transparent;
   cursor: pointer;
-  font-family: "Inter", sans-serif !important;
+  font-family: "Space Grotesk", "Inter", sans-serif !important;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
+/* Primary Button - Holographic Gradient */
 .btn-p {
   font-size: 1.4rem;
-  background: var(--brand-gradient);
-  color: #1b1b28;
-  text-transform: uppercase;
-  font-weight: 600;
+  background: var(--holographic-gradient);
+  color: var(--deep-space-black);
+  text-transform: none;
+  font-weight: 500;
   letter-spacing: 0.5px;
-  border-radius: 1.2rem;
+  border-radius: 14px;
   padding: 1rem 2rem;
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
   border: none;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
   white-space: nowrap;
+  font-family: "Space Grotesk", sans-serif;
 
+  /* Metallic shimmer sweep animation */
   &::before {
     content: "";
     position: absolute;
@@ -189,8 +213,8 @@ button {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
+    background: linear-gradient(90deg, transparent, rgba(200, 214, 247, 0.4), transparent);
+    transition: left 0.6s;
   }
 
   &-big {
@@ -201,6 +225,7 @@ button {
   @media (max-width: 768px) {
     font-size: 1.3rem;
     padding: 0.9rem 1.8rem;
+    width: 100%;
   }
 
   @media (max-width: 400px) {
@@ -210,7 +235,7 @@ button {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(179, 136, 255, 0.35);
+    box-shadow: 0 0 15px rgba(77, 168, 255, 0.7);
     
     &::before {
       left: 100%;
@@ -223,7 +248,7 @@ button {
 }
 
 .CircleIco {
-  background: rgba(0, 255, 255, 0.1);
+  background: rgba(77, 168, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 50%;
   overflow: hidden;
@@ -232,15 +257,15 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  border: 1px solid var(--cyber-blue);
+  box-shadow: 0 0 15px rgba(77, 168, 255, 0.3);
   transition: all 0.3s ease;
 
   svg {
     margin-top: 6px;
     width: 30px;
-    fill: var(--neon-cyan);
-    filter: drop-shadow(0 0 5px var(--neon-cyan));
+    fill: var(--cyber-blue);
+    filter: drop-shadow(0 0 5px var(--cyber-blue));
     transition: all 0.3s ease;
 
     &:first-child {
@@ -249,23 +274,29 @@ button {
   }
 
   &:hover {
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 25px rgba(77, 168, 255, 0.6);
     transform: scale(1.05);
   }
 }
 
+/* Secondary Button - Chrome background with neon outline */
 .btn-s {
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
   font-size: 1.8rem;
-  text-transform: uppercase;
+  text-transform: none;
   gap: 1rem;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   cursor: pointer;
-  color: var(--neon-cyan);
-  font-weight: 600;
+  color: var(--cyber-blue);
+  font-weight: 500;
   transition: all 0.3s ease;
+  background: var(--chrome-gradient);
+  border: 1px solid var(--cyber-blue);
+  border-radius: 14px;
+  padding: 1rem 2rem;
+  font-family: "Space Grotesk", sans-serif;
 
   &-90 {
     .CircleIco {
@@ -279,8 +310,9 @@ button {
   }
 
   &:hover {
-    color: var(--neon-magenta);
-    text-shadow: 0 0 10px var(--neon-magenta);
+    color: var(--neon-violet);
+    border-color: var(--neon-violet);
+    box-shadow: 0 0 15px rgba(164, 92, 255, 0.5);
     
     .CircleIco {
       svg {
@@ -294,27 +326,27 @@ button {
 
 // Neon text effect utility
 .neon-text {
-  color: var(--neon-cyan);
+  color: var(--cyber-blue);
   text-shadow: 
-    0 0 10px var(--neon-cyan),
-    0 0 20px var(--neon-cyan),
-    0 0 30px var(--neon-cyan);
+    0 0 10px var(--cyber-blue),
+    0 0 20px var(--cyber-blue),
+    0 0 30px var(--cyber-blue);
 }
 
 .neon-text-magenta {
-  color: var(--neon-magenta);
+  color: var(--neon-violet);
   text-shadow: 
-    0 0 10px var(--neon-magenta),
-    0 0 20px var(--neon-magenta),
-    0 0 30px var(--neon-magenta);
+    0 0 10px var(--neon-violet),
+    0 0 20px var(--neon-violet),
+    0 0 30px var(--neon-violet);
 }
 
-// Glass morphism effect
+// Glass morphism effect - Frosted glass with chrome border
 .glass {
-  background: rgba(21, 21, 32, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: rgba(30, 31, 38, 0.6);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--chrome-silver);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(200, 214, 247, 0.1);
 }
 
 // Animated border
