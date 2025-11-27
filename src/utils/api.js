@@ -128,6 +128,13 @@ export const wardrobeAPI = {
     });
     return await response.json();
   },
+  delete: async (itemId) => {
+    const response = await fetch(`${API_BASE_URL}/api/wardrobe/${itemId}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+    });
+    return await response.json();
+  },
 };
 // Fashion Chat API (without wardrobe - Milestone 1)
 export const fashionChatAPI = {

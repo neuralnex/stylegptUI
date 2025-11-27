@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
+import Header from "../components/Header";
 import "./Wardrobe.scss";
 
 const Wardrobe = () => {
@@ -52,14 +53,45 @@ const Wardrobe = () => {
     fetchItems();
   };
 
+  const handleDelete = async (itemId, itemCategory) => {
+    if (!window.confirm(`Are you sure you want to delete this ${itemCategory}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await wardrobeAPI.delete(itemId);
+      if (res.success) {
+        // Remove item from local state
+        setItems(items.filter((item) => item.id !== itemId));
+      } else {
+        alert(res.error || "Failed to delete item");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert(err.message || "Failed to delete item. Please try again.");
+    }
+  };
+
   if (!isAuthenticated) return null;
 
   return (
     <div className="wardrobe-page">
+      <Header />
       <div className="wardrobe-container">
         <div className="wardrobe-header">
-          <h1>Your Wardrobe</h1>
-          <p>Browse all items you've uploaded. Use filters to find things quicker.</p>
+          <div className="header-top">
+            <div>
+              <h1>Your Wardrobe</h1>
+              <p>Browse all items you've uploaded. Use filters to find things quicker.</p>
+            </div>
+            <button 
+              className="btn-3d" 
+              onClick={() => navigate("/wardrobe-3d")}
+              title="View in 3D"
+            >
+              🎨 3D View
+            </button>
+          </div>
           <form className="filters" onSubmit={handleSearch}>
             <input
               type="text"
@@ -93,7 +125,15 @@ const Wardrobe = () => {
           <div className="wardrobe-grid">
             {items.map((item) => (
               <div key={item.id} className="wardrobe-card">
-                <img src={item.imageUrl} alt={item.category} />
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(item.id, item.category)}
+                  title="Delete item"
+                  aria-label="Delete item"
+                >
+                  ×
+                </button>
+                <img src={item.processedImageUrl || item.imageUrl} alt={item.category} />
                 <div className="meta">
                   <div className="row">
                     <span className="category">{item.category}</span>
