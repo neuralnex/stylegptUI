@@ -132,9 +132,15 @@ const Chat = () => {
         const aiMessage = {
           type: "ai",
           content: formattedContent || "I'm here to help with outfit suggestions from your wardrobe!",
+          selectedItems: response.selectedItems || [],
+          isSuggestion: response.selectedItems && response.selectedItems.length > 0,
           timestamp: new Date(),
         };
-        setMessages((prev) => [...prev, aiMessage]);
+        
+        setMessages((prev) => {
+          const filtered = prev.filter(msg => !msg.isSuggestion);
+          return [...filtered, aiMessage];
+        });
       } else {
         const errorMessage = {
           type: "ai",
@@ -220,6 +226,108 @@ const Chat = () => {
                     <div className="message-content">
                       {msg.content}
                     </div>
+                    {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
+                      <div className="selected-items">
+                        <div className="items-grid">
+                          {msg.selectedItems.map((item, itemIndex) => (
+                            <div key={itemIndex} className="item-card">
+                              <img 
+                                src={item.processedImageUrl || item.imageUrl} 
+                                alt={item.category}
+                                onError={(e) => {
+                                  e.target.src = item.imageUrl;
+                                }}
+                              />
+                              <div className="item-info">
+                                <span className="item-category">{item.category}</span>
+                                <span className="item-style">{item.style}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
+                      <button 
+                        className="suggest-another-btn"
+                        onClick={async () => {
+                          if (loading) return;
+                          const suggestMessage = "Suggest another outfit";
+                          setInputMessage("");
+                          
+                          const newUserMessage = {
+                            type: "user",
+                            content: suggestMessage,
+                            timestamp: new Date(),
+                          };
+                          setMessages((prev) => {
+                            const filtered = prev.filter(m => !m.isSuggestion);
+                            return [...filtered, newUserMessage];
+                          });
+                          setLoading(true);
+
+                          try {
+                            const response = await suggestAPI.getSuggestion(suggestMessage, sessionId);
+                            
+                            if (response.success && response.suggestion) {
+                              let rawContent = null;
+                              if (typeof response.suggestion === 'string') {
+                                rawContent = response.suggestion;
+                              } else if (response.suggestion.message) {
+                                rawContent = response.suggestion.message;
+                              } else if (response.suggestion.response) {
+                                rawContent = response.suggestion.response;
+                              } else if (response.suggestion.text) {
+                                rawContent = response.suggestion.text;
+                              } else {
+                                rawContent = JSON.stringify(response.suggestion);
+                              }
+                              
+                              let formattedContent = formatMessage(rawContent);
+                              
+                              const sentences = formattedContent.split(/[.!?]\s+/);
+                              if (sentences.length > 1) {
+                                const lastSentence = sentences[sentences.length - 1];
+                                if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
+                                  sentences.pop();
+                                  formattedContent = sentences.join(". ").trim();
+                                  if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
+                                    formattedContent += ".";
+                                  }
+                                }
+                              }
+                              
+                              const aiMessage = {
+                                type: "ai",
+                                content: formattedContent || "I'm here to help with outfit suggestions from your wardrobe!",
+                                selectedItems: response.selectedItems || [],
+                                isSuggestion: true,
+                                timestamp: new Date(),
+                              };
+                              setMessages((prev) => {
+                                const filtered = prev.filter(m => !m.isSuggestion);
+                                return [...filtered, aiMessage];
+                              });
+                            }
+                          } catch (error) {
+                            console.error("Chat error:", error);
+                            const errorMessage = {
+                              type: "ai",
+                              content: error.message?.includes("Failed to fetch")
+                                ? "Unable to connect to the server. Please check your internet connection and try again."
+                                : "I'm having trouble connecting right now. Please check your connection and try again.",
+                              timestamp: new Date(),
+                            };
+                            setMessages((prev) => [...prev, errorMessage]);
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        disabled={loading}
+                      >
+                        Suggest Another Outfit
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
