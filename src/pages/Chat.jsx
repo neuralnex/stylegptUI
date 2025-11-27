@@ -112,7 +112,23 @@ const Chat = () => {
           rawContent = JSON.stringify(response.suggestion);
         }
         
-        const formattedContent = formatMessage(rawContent);
+        let formattedContent = formatMessage(rawContent);
+        
+        // Additional cleanup: remove any trailing corrupted text
+        // Split by sentences and remove the last one if it looks corrupted
+        const sentences = formattedContent.split(/[.!?]\s+/);
+        if (sentences.length > 1) {
+          const lastSentence = sentences[sentences.length - 1];
+          // If last sentence is suspiciously short or contains only lowercase letters (likely corrupted)
+          if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
+            sentences.pop();
+            formattedContent = sentences.join(". ").trim();
+            if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
+              formattedContent += ".";
+            }
+          }
+        }
+        
         const aiMessage = {
           type: "ai",
           content: formattedContent || "I'm here to help with outfit suggestions from your wardrobe!",
@@ -131,9 +147,7 @@ const Chat = () => {
       console.error("Chat error:", error);
       const errorMessage = {
         type: "ai",
-        content: error.message?.includes("timeout") 
-          ? "The request took too long. Please try again."
-          : error.message?.includes("Failed to fetch")
+        content: error.message?.includes("Failed to fetch")
           ? "Unable to connect to the server. Please check your internet connection and try again."
           : "I'm having trouble connecting right now. Please check your connection and try again.",
         timestamp: new Date(),
