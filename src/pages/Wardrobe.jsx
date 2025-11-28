@@ -13,6 +13,8 @@ const Wardrobe = () => {
   const [items, setItems] = useState([]);
   const [q, setQ] = useState("");
   const [style, setStyle] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -50,8 +52,34 @@ const Wardrobe = () => {
   const clearFilters = () => {
     setQ("");
     setStyle("");
+    setSelectedCategory(null);
     fetchItems();
   };
+
+  const groupByCategory = (itemsList) => {
+    const grouped = {};
+    itemsList.forEach(item => {
+      const category = item.category || "other";
+      if (!grouped[category]) {
+        grouped[category] = [];
+      }
+      grouped[category].push(item);
+    });
+    return grouped;
+  };
+
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      setSelectedCategory(null);
+    } else {
+      setAnimating(true);
+      setSelectedCategory(category);
+      setTimeout(() => setAnimating(false), 600);
+    }
+  };
+
+  const categories = groupByCategory(items);
+  const categoryList = Object.keys(categories).sort();
 
   const handleDelete = async (itemId, itemCategory) => {
     if (!window.confirm(`Are you sure you want to delete this ${itemCategory}? This action cannot be undone.`)) {
@@ -115,26 +143,74 @@ const Wardrobe = () => {
             <button className="btn-p" onClick={() => navigate("/upload")}>Upload Wardrobe</button>
           </div>
         ) : (
-          <div className="wardrobe-grid">
-            {items.map((item) => (
-              <div key={item.id} className="wardrobe-card">
+          <div className="wardrobe-categories">
+            <div className="categories-list">
+              {categoryList.map((category) => (
                 <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(item.id, item.category)}
-                  title="Delete item"
-                  aria-label="Delete item"
+                  key={category}
+                  className={`category-btn ${selectedCategory === category ? "active" : ""}`}
+                  onClick={() => handleCategoryClick(category)}
                 >
-                  ×
+                  <span className="category-name">{category}</span>
+                  <span className="category-count">({categories[category].length})</span>
                 </button>
-                <img src={item.processedImageUrl || item.imageUrl} alt={item.category} />
-                <div className="meta">
-                  <div className="row">
-                    <span className="category">{item.category}</span>
-                    <span className={`style style-${item.style}`}>{item.style}</span>
+              ))}
+            </div>
+
+            <div className={`wardrobe-items-container ${animating ? "animating" : ""}`}>
+              {selectedCategory ? (
+                <div className="category-items">
+                  <h2 className="category-title">{selectedCategory}</h2>
+                  <div className="wardrobe-grid">
+                    {categories[selectedCategory].map((item, index) => (
+                      <div 
+                        key={item.id} 
+                        className="wardrobe-card"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(item.id, item.category)}
+                          title="Delete item"
+                          aria-label="Delete item"
+                        >
+                          ×
+                        </button>
+                        <img src={item.processedImageUrl || item.imageUrl} alt={item.name || item.category} />
+                        <div className="meta">
+                          <div className="row">
+                            <span className="category">{item.name || item.category}</span>
+                            <span className={`style style-${item.style}`}>{item.style}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-            ))}
+              ) : (
+                <div className="wardrobe-grid all-items">
+                  {items.map((item) => (
+                    <div key={item.id} className="wardrobe-card">
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(item.id, item.category)}
+                        title="Delete item"
+                        aria-label="Delete item"
+                      >
+                        ×
+                      </button>
+                      <img src={item.processedImageUrl || item.imageUrl} alt={item.name || item.category} />
+                      <div className="meta">
+                        <div className="row">
+                          <span className="category">{item.name || item.category}</span>
+                          <span className={`style style-${item.style}`}>{item.style}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

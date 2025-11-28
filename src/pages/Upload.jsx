@@ -13,6 +13,7 @@ const Upload = () => {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [uploadedItems, setUploadedItems] = useState([]);
+  const [selectedStyle, setSelectedStyle] = useState("casual");
 
   React.useEffect(() => {
     if (!isAuthenticated) {
@@ -45,7 +46,7 @@ const Upload = () => {
     setMessage("");
 
     try {
-      const response = await uploadAPI.uploadImages(files);
+      const response = await uploadAPI.uploadImages(files, selectedStyle);
       if (response.success) {
         const successMsg = response.failed && response.failed > 0
           ? `Successfully uploaded ${response.count} item(s)! ${response.failed} item(s) failed.`
@@ -123,6 +124,23 @@ const Upload = () => {
                   <div className="preview-more">+{files.length - 8} more</div>
                 )}
               </div>
+            </div>
+          )}
+
+          {files.length > 0 && (
+            <div className="style-selection">
+              <label htmlFor="style-select">Select Style for These Items:</label>
+              <select
+                id="style-select"
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value)}
+                disabled={uploading}
+              >
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+                <option value="streetwear">Streetwear</option>
+                <option value="sportswear">Sportswear</option>
+              </select>
             </div>
           )}
 

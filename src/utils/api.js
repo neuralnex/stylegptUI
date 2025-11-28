@@ -97,11 +97,12 @@ export const profileAPI = {
 
 // Upload API
 export const uploadAPI = {
-  uploadImages: async (files) => {
+  uploadImages: async (files, style = "casual") => {
     const formData = new FormData();
     files.forEach((file) => {
       formData.append("image", file);
     });
+    formData.append("style", style);
 
     const token = getToken();
     const response = await fetch(`${API_BASE_URL}/api/upload`, {
