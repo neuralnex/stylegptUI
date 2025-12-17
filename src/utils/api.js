@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://nexusbert-stylegpt-milestone2.hf.space";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 // Helper function to get auth token from localStorage
 const getToken = () => {
@@ -137,25 +137,31 @@ export const wardrobeAPI = {
     return await response.json();
   },
 };
+
 // Fashion Chat API (without wardrobe - Milestone 1)
 export const fashionChatAPI = {
-  sendMessage: async (message, sessionId, retryCount = 0) => {
+  sendMessage: async (message, sessionId, images = null, retryCount = 0) => {
     try {
       const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
+      
+      const requestBody = { message, session_id: sessionId };
+      if (images && Array.isArray(images) && images.length > 0) {
+        requestBody.images = images;
+      }
       
       const response = await fetch(`${FASHION_CHAT_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message, session_id: sessionId }),
+        body: JSON.stringify(requestBody),
       });
       
       if (!response.ok) {
         // If it's a 503 or 502 (service unavailable), retry once
         if ((response.status === 503 || response.status === 502) && retryCount < 1) {
           console.log("Service unavailable, retrying...");
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+          await new Promise(resolve => setTimeout(resolve, 2000));
           return fashionChatAPI.sendMessage(message, sessionId, retryCount + 1);
         }
         const errorText = await response.text();
@@ -169,29 +175,84 @@ export const fashionChatAPI = {
       if (retryCount < 1 && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
         console.log("Network error, retrying...");
         await new Promise(resolve => setTimeout(resolve, 2000));
-        return fashionChatAPI.sendMessage(message, sessionId, retryCount + 1);
+        return fashionChatAPI.sendMessage(message, sessionId, images, retryCount + 1);
       }
       console.error("Fashion chat API error:", error);
       throw error;
     }
   },
+
+  // Streaming version - returns an async generator
+  sendMessageStream: async function* (message, sessionId, images = null) {
+    const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
+    
+    // Build form data for multipart request to streaming endpoint
+    const formData = new FormData();
+    formData.append('message', message);
+    formData.append('session_id', sessionId);
+
+    const response = await fetch(`${FASHION_CHAT_URL}/chat/upload/stream`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data:')) {
+          try {
+            const jsonStr = line.substring(5).trim();
+            if (jsonStr) {
+              const data = JSON.parse(jsonStr);
+              yield data;
+            }
+          } catch (e) {
+            // Skip malformed JSON
+          }
+        }
+      }
+    }
+
+    // Signal completion
+    yield { type: "done" };
+  },
 };
 
 // Suggest API (with wardrobe - Milestone 2)
 export const suggestAPI = {
-  getSuggestion: async (message, sessionId, retryCount = 0) => {
+  getSuggestion: async (message, sessionId, images = null, retryCount = 0) => {
     try {
+      const requestBody = { message, session_id: sessionId };
+      if (images && Array.isArray(images) && images.length > 0) {
+        requestBody.images = images;
+      }
+      
       const response = await fetch(`${API_BASE_URL}/api/suggest`, {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ message, session_id: sessionId }),
+        body: JSON.stringify(requestBody),
       });
       
       if (!response.ok) {
         // If it's a 503 or 502 (service unavailable), retry once
         if ((response.status === 503 || response.status === 502) && retryCount < 1) {
           console.log("Service unavailable, retrying...");
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+          await new Promise(resolve => setTimeout(resolve, 2000));
           return suggestAPI.getSuggestion(message, sessionId, retryCount + 1);
         }
         const errorText = await response.text();
@@ -205,14 +266,63 @@ export const suggestAPI = {
       if (retryCount < 1 && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
         console.log("Network error, retrying...");
         await new Promise(resolve => setTimeout(resolve, 2000));
-        return suggestAPI.getSuggestion(message, sessionId, retryCount + 1);
+        return suggestAPI.getSuggestion(message, sessionId, images, retryCount + 1);
       }
       console.error("Suggest API error:", error);
       throw error;
+    }
+  },
+
+  // Streaming version - returns an async generator
+  getSuggestionStream: async function* (message, sessionId, images = null) {
+    const requestBody = { message, session_id: sessionId };
+    if (images && Array.isArray(images) && images.length > 0) {
+      requestBody.images = images;
+    }
+
+    const token = getToken();
+    const response = await fetch(`${API_BASE_URL}/api/suggest/stream`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data:')) {
+          try {
+            const jsonStr = line.substring(5).trim();
+            if (jsonStr) {
+              const data = JSON.parse(jsonStr);
+              yield data;
+            }
+          } catch (e) {
+            // Skip malformed JSON
+          }
+        }
+      }
     }
   },
 };
 
 // Export token management functions
 export { getToken, setToken, removeToken };
-

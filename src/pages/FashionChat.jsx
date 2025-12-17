@@ -11,6 +11,8 @@ const FashionChat = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const fileInputRef = useRef(null);
   const [sessionId, setSessionId] = useState(() => {
     // Initialize sessionId immediately if user is available
     if (user?.id) {
@@ -76,78 +78,141 @@ const FashionChat = () => {
     handleSendWithSession(e, sessionId);
   };
 
+  const handleImageSelect = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const imagePromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          resolve({
+            file,
+            url: event.target.result,
+            name: file.name,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(imagePromises).then((images) => {
+      setSelectedImages((prev) => [...prev, ...images]);
+    });
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const removeImage = (index) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const convertImagesToUrls = () => {
+    return selectedImages.map((img) => img.url);
+  };
+
   const handleSendWithSession = async (e, currentSessionId) => {
     if (e) e.preventDefault();
 
     const userMessage = inputMessage.trim();
-    if (!userMessage) return;
+    if (!userMessage && selectedImages.length === 0) return;
     
+    const imageUrls = convertImagesToUrls();
     setInputMessage("");
+    setSelectedImages([]);
 
     // Add user message
     const newUserMessage = {
       type: "user",
-      content: userMessage,
+      content: userMessage || "Sent images",
+      images: imageUrls,
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, newUserMessage]);
     setLoading(true);
 
+    // Add placeholder AI message for streaming
+    const streamingMessageId = Date.now();
+    setMessages((prev) => [...prev, {
+      id: streamingMessageId,
+      type: "ai",
+      content: "",
+      isStreaming: true,
+      timestamp: new Date(),
+    }]);
+
     try {
-      const response = await fashionChatAPI.sendMessage(userMessage, currentSessionId);
-      console.log("Fashion chat response:", response);
-      
-      // Handle different response formats
-      let rawContent = null;
-      if (typeof response === 'string') {
-        rawContent = response;
-      } else if (response?.message) {
-        rawContent = response.message;
-      } else if (response?.response) {
-        rawContent = response.response;
-      } else if (response?.text) {
-        rawContent = response.text;
-      } else if (response) {
-        rawContent = JSON.stringify(response);
+      let fullContent = "";
+
+      // Use streaming API
+      for await (const data of fashionChatAPI.sendMessageStream(
+        userMessage || "What do you see in these images?",
+        currentSessionId,
+        imageUrls
+      )) {
+        if (data.type === "chunk" && data.content) {
+          fullContent += data.content;
+          // Update the streaming message
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === streamingMessageId
+                ? { ...msg, content: fullContent }
+                : msg
+            )
+          );
+        } else if (data.type === "done") {
+          // Stream complete
+        } else if (data.type === "error") {
+          throw new Error(data.message);
+        }
       }
+
+      // Format and finalize the message
+      let formattedContent = formatMessage(fullContent);
       
-      if (rawContent) {
-        let formattedContent = formatMessage(rawContent);
-        
-        // Additional cleanup: remove any trailing corrupted text
-        // Split by sentences and remove the last one if it looks corrupted
-        const sentences = formattedContent.split(/[.!?]\s+/);
-        if (sentences.length > 1) {
-          const lastSentence = sentences[sentences.length - 1];
-          // If last sentence is suspiciously short or contains only lowercase letters (likely corrupted)
-          if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
-            sentences.pop();
-            formattedContent = sentences.join(". ").trim();
-            if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
-              formattedContent += ".";
-            }
+      // Cleanup trailing corrupted text
+      const sentences = formattedContent.split(/[.!?]\s+/);
+      if (sentences.length > 1) {
+        const lastSentence = sentences[sentences.length - 1];
+        if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
+          sentences.pop();
+          formattedContent = sentences.join(". ").trim();
+          if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
+            formattedContent += ".";
           }
         }
-        
-        const aiMessage = {
-          type: "ai",
-          content: formattedContent || "I'm here to help with fashion advice!",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, aiMessage]);
-      } else {
-        throw new Error("Invalid response format");
       }
+
+      // Update to final message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === streamingMessageId
+            ? {
+                ...msg,
+                content: formattedContent || "I'm here to help with fashion advice!",
+                isStreaming: false,
+              }
+            : msg
+        )
+      );
     } catch (error) {
       console.error("Fashion chat error:", error);
-      const errorMessage = {
-        type: "ai",
-        content: error.message?.includes("Failed to fetch")
-          ? "Unable to connect to the server. Please check your internet connection and try again."
-          : "I'm having trouble connecting right now. Please try again.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      // Update the streaming message to show error
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === streamingMessageId
+            ? {
+                ...msg,
+                content: error.message?.includes("Failed to fetch")
+                  ? "Unable to connect to the server. Please check your internet connection and try again."
+                  : "I'm having trouble connecting right now. Please try again.",
+                isStreaming: false,
+              }
+            : msg
+        )
+      );
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -212,6 +277,18 @@ const FashionChat = () => {
                     {msg.type === "user" ? "👤" : "🤖"}
                   </div>
                   <div className="message-content-wrapper">
+                    {msg.images && msg.images.length > 0 && (
+                      <div className="message-images">
+                        {msg.images.map((imgUrl, imgIndex) => (
+                          <img
+                            key={imgIndex}
+                            src={imgUrl}
+                            alt={`Uploaded ${imgIndex + 1}`}
+                            className="message-image"
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className="message-content">
                       {msg.content}
                     </div>
@@ -242,8 +319,37 @@ const FashionChat = () => {
 
       <div className="input-area">
         <div className="chat-input-form">
+          {selectedImages.length > 0 && (
+            <div className="selected-images-preview">
+              {selectedImages.map((img, index) => (
+                <div key={index} className="image-preview-item">
+                  <img src={img.url} alt={img.name} />
+                  <button
+                    type="button"
+                    className="remove-image-btn"
+                    onClick={() => removeImage(index)}
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <form onSubmit={handleSend}>
             <div className="input-wrapper">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageSelect}
+                style={{ display: "none" }}
+                id="image-upload-fashion"
+              />
+              <label htmlFor="image-upload-fashion" className="image-upload-btn" title="Upload images">
+                📷
+              </label>
               <input
                 ref={inputRef}
                 type="text"
@@ -256,7 +362,7 @@ const FashionChat = () => {
               <button
                 type="submit"
                 className="send-button"
-                disabled={loading || !inputMessage.trim()}
+                disabled={loading || (!inputMessage.trim() && selectedImages.length === 0)}
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
@@ -270,7 +376,7 @@ const FashionChat = () => {
               </button>
             </div>
           </form>
-          <p className="input-hint">Fashion Chat can make mistakes. Check important info.</p>
+          <p className="input-hint">Fashion Chat can make mistakes. Check important info. You can also upload images!</p>
         </div>
       </div>
     </div>
