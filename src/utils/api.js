@@ -71,25 +71,73 @@ export const profileAPI = {
     return await response.json();
   },
 
-  updateProfile: async (name, profilePictureFile, removePicture = false) => {
-    const formData = new FormData();
-    if (name) {
-      formData.append("name", name);
-    }
-    if (profilePictureFile) {
-      formData.append("profilePicture", profilePictureFile);
-    }
-    if (removePicture) {
-      formData.append("removePicture", "true");
-    }
-
-    const token = getToken();
+  updateProfile: async (name) => {
     const response = await fetch(`${API_BASE_URL}/api/profile`, {
       method: "PUT",
-      headers: {
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-      body: formData,
+      headers: authHeaders(),
+      body: JSON.stringify({ name }),
+    });
+    return await response.json();
+  },
+};
+
+// Avatar API
+export const avatarAPI = {
+  createAvatar: async (avatarId) => {
+    const response = await fetch(`${API_BASE_URL}/api/avatar/create`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ avatarId }),
+    });
+    return await response.json();
+  },
+
+  getAvatarGLB: async (options = {}) => {
+    const params = new URLSearchParams();
+    if (options.quality) params.append("quality", options.quality);
+    if (options.lod) params.append("lod", options.lod.toString());
+    if (options.textureAtlas) params.append("textureAtlas", options.textureAtlas.toString());
+    if (options.textureFormat) params.append("textureFormat", options.textureFormat);
+    if (options.useDracoMeshCompression) params.append("useDracoMeshCompression", "true");
+
+    const queryString = params.toString();
+    const response = await fetch(`${API_BASE_URL}/api/avatar/glb${queryString ? `?${queryString}` : ""}`, {
+      method: "GET",
+      headers: authHeaders(),
+    });
+    return await response.json();
+  },
+
+  getAvatarRender: async (options = {}) => {
+    const params = new URLSearchParams();
+    if (options.size) params.append("size", options.size.toString());
+    if (options.quality) params.append("quality", options.quality.toString());
+    if (options.camera) params.append("camera", options.camera);
+    if (options.background) params.append("background", options.background);
+    if (options.expression) params.append("expression", options.expression);
+    if (options.pose) params.append("pose", options.pose);
+
+    const queryString = params.toString();
+    const response = await fetch(`${API_BASE_URL}/api/avatar/render${queryString ? `?${queryString}` : ""}`, {
+      method: "GET",
+      headers: authHeaders(),
+    });
+    return await response.json();
+  },
+
+  getAvatarMetadata: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/avatar/metadata`, {
+      method: "GET",
+      headers: authHeaders(),
+    });
+    return await response.json();
+  },
+
+  tryOnAvatar: async (assetIds, quality = "medium") => {
+    const response = await fetch(`${API_BASE_URL}/api/avatar/try-on`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ assetIds, quality }),
     });
     return await response.json();
   },

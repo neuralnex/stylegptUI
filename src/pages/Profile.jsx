@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { profileAPI } from "../utils/api";
+import { profileAPI, avatarAPI } from "../utils/api";
 import "./Profile.scss";
 
 const Profile = () => {
@@ -16,7 +16,10 @@ const Profile = () => {
     profilePicture: null,
   });
   const [preview, setPreview] = useState(null);
-  const fileInputRef = useRef(null);
+  const [showAvatarCreator, setShowAvatarCreator] = useState(false);
+  const [avatarId, setAvatarId] = useState(null);
+  const iframeRef = useRef(null);
+  const [avatarRenderUrl, setAvatarRenderUrl] = useState(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -34,7 +37,30 @@ const Profile = () => {
             email: response.user.email || "",
             profilePicture: response.user.profilePicture || null,
           });
-          setPreview(response.user.profilePicture || null);
+          setAvatarId(response.user.readyPlayerMeAvatarId || null);
+          
+          if (response.user.readyPlayerMeAvatarId) {
+            try {
+              const avatarResponse = await avatarAPI.getAvatarRender({
+                size: 400,
+                quality: 90,
+                camera: "portrait",
+              });
+              if (avatarResponse.success) {
+                setPreview(avatarResponse.renderUrl);
+                setAvatarRenderUrl(avatarResponse.renderUrl);
+              } else if (response.user.profilePicture) {
+                setPreview(response.user.profilePicture);
+              }
+            } catch (err) {
+              console.error("Failed to load avatar render:", err);
+              if (response.user.profilePicture) {
+                setPreview(response.user.profilePicture);
+              }
+            }
+          } else if (response.user.profilePicture) {
+            setPreview(response.user.profilePicture);
+          }
         }
       } catch (err) {
         console.error("Failed to load profile:", err);
@@ -44,22 +70,6 @@ const Profile = () => {
     loadProfile();
   }, [isAuthenticated, navigate]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Image size must be less than 5MB");
-        return;
-      }
-      setFormData({ ...formData, profilePicture: file });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setError(null);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,10 +78,7 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      const response = await profileAPI.updateProfile(
-        formData.name,
-        formData.profilePicture instanceof File ? formData.profilePicture : null
-      );
+      const response = await profileAPI.updateProfile(formData.name);
 
       if (response.success) {
         setSuccess(true);
@@ -79,8 +86,22 @@ const Profile = () => {
         if (setUser) {
           setUser(response.user);
         }
-        // Update preview if new picture was uploaded
-        if (response.user.profilePicture) {
+        // Update preview with avatar render if available
+        if (response.user.readyPlayerMeAvatarId) {
+          try {
+            const avatarResponse = await avatarAPI.getAvatarRender({
+              size: 400,
+              quality: 90,
+              camera: "portrait",
+            });
+            if (avatarResponse.success) {
+              setPreview(avatarResponse.renderUrl);
+              setAvatarRenderUrl(avatarResponse.renderUrl);
+            }
+          } catch (err) {
+            console.error("Failed to load avatar render:", err);
+          }
+        } else if (response.user.profilePicture) {
           setPreview(response.user.profilePicture);
         }
         setTimeout(() => setSuccess(false), 3000);
@@ -94,30 +115,51 @@ const Profile = () => {
     }
   };
 
-  const handleRemovePicture = async () => {
-    if (!preview) return;
-    
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await profileAPI.updateProfile(formData.name, null, true);
-      if (response.success) {
-        setPreview(null);
-        setFormData({ ...formData, profilePicture: null });
-        if (setUser) {
-          setUser({ ...response.user, profilePicture: null });
+  useEffect(() => {
+    if (!showAvatarCreator) return;
+
+    const handleMessage = async (event) => {
+      if (event.data?.source !== "readyplayerme") return;
+
+      if (event.data.eventName === "v1.avatar.exported") {
+        const { avatarId: newAvatarId } = event.data.data;
+        if (newAvatarId) {
+          try {
+            const response = await avatarAPI.createAvatar(newAvatarId);
+            if (response.success) {
+              setAvatarId(newAvatarId);
+              setShowAvatarCreator(false);
+              
+              // Get avatar render for profile picture
+              try {
+                const avatarResponse = await avatarAPI.getAvatarRender({
+                  size: 400,
+                  quality: 90,
+                  camera: "portrait",
+                });
+                if (avatarResponse.success) {
+                  setPreview(avatarResponse.renderUrl);
+                  setAvatarRenderUrl(avatarResponse.renderUrl);
+                }
+              } catch (err) {
+                console.error("Failed to load avatar render:", err);
+              }
+              
+              setSuccess(true);
+              setTimeout(() => setSuccess(false), 3000);
+            } else {
+              setError(response.error || "Failed to save avatar");
+            }
+          } catch (err) {
+            setError("Failed to save avatar");
+          }
         }
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 3000);
-      } else {
-        setError(response.error || "Failed to remove profile picture");
       }
-    } catch (err) {
-      setError("Failed to remove profile picture");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [showAvatarCreator]);
 
   if (!isAuthenticated) {
     return null;
@@ -133,6 +175,13 @@ const Profile = () => {
             <button type="button" className="btn-p" onClick={() => navigate("/wardrobe")}>
               View Wardrobe
             </button>
+            <button 
+              type="button" 
+              className="btn-p" 
+              onClick={() => setShowAvatarCreator(true)}
+            >
+              {avatarId ? "Edit Avatar" : "Create Avatar"}
+            </button>
           </div>
         </div>
 
@@ -144,45 +193,35 @@ const Profile = () => {
               ) : (
                 <div className="profile-placeholder">
                   <span className="placeholder-icon">👤</span>
+                  <p className="placeholder-text">Create an avatar to set your profile picture</p>
                 </div>
               )}
               <div className="picture-overlay">
-                <button
-                  type="button"
-                  className="change-picture-btn"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M13 5L15 7L10 12L7 9L2 14V16H18V5H13Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Change Photo
-                </button>
-                {preview && (
+                {!avatarId && (
                   <button
                     type="button"
-                    className="remove-picture-btn"
-                    onClick={handleRemovePicture}
-                    disabled={loading}
+                    className="create-avatar-btn"
+                    onClick={() => setShowAvatarCreator(true)}
                   >
-                    Remove
+                    Create Avatar
+                  </button>
+                )}
+                {avatarId && (
+                  <button
+                    type="button"
+                    className="edit-avatar-btn"
+                    onClick={() => setShowAvatarCreator(true)}
+                  >
+                    Edit Avatar
                   </button>
                 )}
               </div>
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <p className="picture-hint">Max size: 5MB. Recommended: 400x400px</p>
+            <p className="picture-hint">
+              {avatarId 
+                ? "Profile picture is generated from your Ready Player Me avatar" 
+                : "Create an avatar to automatically generate your profile picture"}
+            </p>
           </div>
 
           <div className="form-group">
@@ -232,6 +271,31 @@ const Profile = () => {
             </button>
           </div>
         </form>
+
+        {showAvatarCreator && (
+          <div className="avatar-creator-modal">
+            <div className="avatar-creator-content">
+              <div className="avatar-creator-header">
+                <h2>Create Your Avatar</h2>
+                <button 
+                  className="close-btn"
+                  onClick={() => setShowAvatarCreator(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <iframe
+                ref={iframeRef}
+                src={`https://${import.meta.env.VITE_READY_PLAYER_ME_SUBDOMAIN || "demo"}.readyplayer.me/avatar?frameApi${avatarId ? `&id=${avatarId}` : ""}`}
+                width="100%"
+                height="600px"
+                frameBorder="0"
+                allow="camera *; microphone *"
+                style={{ border: "none", borderRadius: "8px" }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

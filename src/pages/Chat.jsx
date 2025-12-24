@@ -146,6 +146,7 @@ const Chat = () => {
     try {
       let fullContent = "";
       let selectedItems = [];
+      let avatarWithOutfitUrl = null;
 
       // Use streaming API
       for await (const data of suggestAPI.getSuggestionStream(
@@ -165,6 +166,7 @@ const Chat = () => {
           );
         } else if (data.type === "done") {
           selectedItems = data.selectedItems || [];
+          avatarWithOutfitUrl = data.avatarWithOutfitUrl || null;
         } else if (data.type === "error") {
           throw new Error(data.message);
         }
@@ -186,7 +188,7 @@ const Chat = () => {
         }
       }
 
-      // Update to final message with selected items
+      // Update to final message with selected items and avatar
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === streamingMessageId
@@ -194,6 +196,7 @@ const Chat = () => {
                 ...msg,
                 content: formattedContent || "I'm here to help with outfit suggestions from your wardrobe!",
                 selectedItems: selectedItems,
+                avatarWithOutfitUrl: avatarWithOutfitUrl,
                 isSuggestion: selectedItems.length > 0,
                 isStreaming: false,
               }
@@ -295,8 +298,26 @@ const Chat = () => {
                     <div className="message-content">
                       {msg.content}
                     </div>
+                    {msg.type === "ai" && msg.avatarWithOutfitUrl && (
+                      <div className="avatar-outfit-preview">
+                        <h4>Your Outfit Preview</h4>
+                        <div className="avatar-3d-container">
+                          <iframe
+                            src={msg.avatarWithOutfitUrl}
+                            title="Avatar with Outfit"
+                            style={{
+                              width: "100%",
+                              height: "400px",
+                              border: "none",
+                              borderRadius: "8px",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                     {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
                       <div className="selected-items">
+                        <h4>Selected Items</h4>
                         <div className="items-grid">
                           {msg.selectedItems.map((item, itemIndex) => (
                             <div key={itemIndex} className="item-card">
@@ -314,6 +335,42 @@ const Chat = () => {
                             </div>
                           ))}
                         </div>
+                        {!msg.avatarWithOutfitUrl && (
+                          <button 
+                            className="try-on-avatar-btn"
+                            onClick={async () => {
+                              if (loading) return;
+                              try {
+                                const assetIds = msg.selectedItems
+                                  .map(item => item.readyPlayerMeAssetId)
+                                  .filter(id => id !== null && id !== undefined);
+                                
+                                if (assetIds.length === 0) {
+                                  alert("Selected items don't have Ready Player Me assets yet. Please wait for assets to be created.");
+                                  return;
+                                }
+
+                                const response = await avatarAPI.tryOnAvatar(assetIds, "medium");
+                                if (response.success && response.avatarUrl) {
+                                  setMessages((prev) =>
+                                    prev.map((m) =>
+                                      m.id === msg.id
+                                        ? { ...m, avatarWithOutfitUrl: response.avatarUrl }
+                                        : m
+                                    )
+                                  );
+                                } else {
+                                  alert(response.error || "Failed to load avatar with outfit");
+                                }
+                              } catch (error) {
+                                console.error("Failed to get avatar:", error);
+                                alert("Failed to load avatar. Please make sure you have created an avatar in your profile.");
+                              }
+                            }}
+                          >
+                            👤 Try on Avatar
+                          </button>
+                        )}
                       </div>
                     )}
                     {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (

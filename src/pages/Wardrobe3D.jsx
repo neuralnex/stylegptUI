@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import Header from "../components/Header";
 import "./Wardrobe3D.scss";
 
@@ -190,11 +191,7 @@ const Wardrobe3D = () => {
         const offsetX = (col - itemsPerRow / 2) * spacing;
         const offsetZ = (row - itemsPerRow / 2) * spacing;
 
-        // Load texture - prefer processed image (background removed) for better 3D effect
-        const textureLoader = new THREE.TextureLoader();
-        const imageUrl = item.processedImageUrl || item.imageUrl;
-        
-        // Create a placeholder plane first (will be replaced when texture loads)
+        // Create a placeholder first
         const placeholderGeometry = new THREE.PlaneGeometry(1, 1);
         const placeholderMaterial = new THREE.MeshStandardMaterial({
           color: 0x333333,
@@ -210,6 +207,92 @@ const Wardrobe3D = () => {
         placeholder.rotation.y = angle + Math.PI / 2;
         placeholder.userData = { item, category, isPlaceholder: true };
         scene.add(placeholder);
+
+        // If 3D model exists, load it; otherwise fall back to 2D image
+        if (item.model3dUrl) {
+          // Load 3D model from base64
+          const loader = new GLTFLoader();
+          
+          // Convert base64 data URL to blob URL for GLTFLoader
+          const base64Data = item.model3dUrl.split(',')[1];
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: 'model/gltf-binary' });
+          const url = URL.createObjectURL(blob);
+
+          loader.load(
+            url,
+            (gltf) => {
+              // Remove placeholder
+              scene.remove(placeholder);
+
+              const model = gltf.scene;
+              
+              // Scale and position the model
+              const box = new THREE.Box3().setFromObject(model);
+              const size = box.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z);
+              const scale = 1.5 / maxDim; // Scale to fit in ~1.5 units
+              model.scale.set(scale, scale, scale);
+              
+              // Center the model
+              const center = box.getCenter(new THREE.Vector3());
+              model.position.set(
+                x + offsetX - center.x * scale,
+                -1.5 + (row * 0.1) - center.y * scale,
+                z + offsetZ - center.z * scale
+              );
+              
+              // Rotate to face camera
+              model.rotation.y = angle + Math.PI / 2;
+              
+              // Enable shadows
+              model.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                  child.castShadow = true;
+                  child.receiveShadow = true;
+                }
+              });
+              
+              model.userData = {
+                item,
+                category,
+                originalPosition: { x: x + offsetX, y: -1.5 + (row * 0.1), z: z + offsetZ },
+                originalScale: scale
+              };
+              
+              scene.add(model);
+              itemsRef.current.push(model);
+              
+              // Clean up blob URL
+              URL.revokeObjectURL(url);
+            },
+            (progress) => {
+              // Loading progress
+              if (progress.total > 0) {
+                const percent = (progress.loaded / progress.total) * 100;
+                // Could update placeholder opacity based on progress
+              }
+            },
+            (err) => {
+              console.error(`Failed to load 3D model for ${item.category} (${item.id}):`, err);
+              // Fall back to 2D image
+              load2DImage(item, placeholder, x + offsetX, z + offsetZ, angle, row);
+            }
+          );
+        } else {
+          // No 3D model, use 2D image
+          load2DImage(item, placeholder, x + offsetX, z + offsetZ, angle, row);
+        }
+      });
+
+      // Helper function to load 2D image as fallback
+      const load2DImage = (item, placeholder, posX, posZ, rotAngle, row) => {
+        const textureLoader = new THREE.TextureLoader();
+        const imageUrl = item.processedImageUrl || item.imageUrl;
         
         textureLoader.load(
           imageUrl,
@@ -234,47 +317,37 @@ const Wardrobe3D = () => {
               transparent: true,
               side: THREE.DoubleSide,
               alphaTest: 0.1,
-              depthWrite: false // Better transparency handling
+              depthWrite: false
             });
             const plane = new THREE.Mesh(planeGeometry, planeMaterial);
             plane.position.set(
-              x + offsetX,
+              posX,
               -1.5 + (row * 0.1),
-              z + offsetZ
+              posZ
             );
-            plane.rotation.y = angle + Math.PI / 2;
+            plane.rotation.y = rotAngle + Math.PI / 2;
             plane.castShadow = true;
             plane.receiveShadow = true;
             
-            // Add hover interaction and item data
-            plane.userData = { 
-              item, 
-              category,
-              originalPosition: { x: x + offsetX, y: -1.5 + (row * 0.1), z: z + offsetZ }
+            plane.userData = {
+              item,
+              category: item.category,
+              originalPosition: { x: posX, y: -1.5 + (row * 0.1), z: posZ }
             };
             scene.add(plane);
             itemsRef.current.push(plane);
 
             // Add slight random rotation for visual interest
             plane.rotation.z = (Math.random() - 0.5) * 0.2;
-            
-            // Dispose of texture when done (handled by Three.js automatically)
           },
-          (progress) => {
-            // Loading progress (optional - can show loading indicator)
-            if (progress.total > 0) {
-              const percent = (progress.loaded / progress.total) * 100;
-              // Could update placeholder opacity based on progress
-            }
-          },
+          undefined,
           (err) => {
             console.error(`Failed to load texture for ${item.category} (${item.id}):`, err);
-            // Keep placeholder visible on error, or remove it
             placeholder.material.opacity = 0.1;
-            placeholder.material.color.setHex(0xff0000); // Red to indicate error
+            placeholder.material.color.setHex(0xff0000);
           }
         );
-      });
+      };
     });
 
     // Mouse controls for camera rotation
