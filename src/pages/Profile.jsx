@@ -39,7 +39,11 @@ const Profile = () => {
           });
           setAvatarId(response.user.readyPlayerMeAvatarId || null);
           
-          if (response.user.readyPlayerMeAvatarId) {
+          // Set profile picture - prefer profilePicture from backend, fallback to avatar render
+          if (response.user.profilePicture) {
+            setPreview(response.user.profilePicture);
+            setAvatarRenderUrl(response.user.profilePicture);
+          } else if (response.user.readyPlayerMeAvatarId) {
             try {
               const avatarResponse = await avatarAPI.getAvatarRender({
                 size: 400,
@@ -49,17 +53,10 @@ const Profile = () => {
               if (avatarResponse.success) {
                 setPreview(avatarResponse.renderUrl);
                 setAvatarRenderUrl(avatarResponse.renderUrl);
-              } else if (response.user.profilePicture) {
-                setPreview(response.user.profilePicture);
               }
             } catch (err) {
               console.error("Failed to load avatar render:", err);
-              if (response.user.profilePicture) {
-                setPreview(response.user.profilePicture);
-              }
             }
-          } else if (response.user.profilePicture) {
-            setPreview(response.user.profilePicture);
           }
         }
       } catch (err) {
@@ -130,19 +127,50 @@ const Profile = () => {
               setAvatarId(newAvatarId);
               setShowAvatarCreator(false);
               
-              // Get avatar render for profile picture
+              // Reload profile to get updated profile picture
               try {
-                const avatarResponse = await avatarAPI.getAvatarRender({
-                  size: 400,
-                  quality: 90,
-                  camera: "portrait",
-                });
-                if (avatarResponse.success) {
-                  setPreview(avatarResponse.renderUrl);
-                  setAvatarRenderUrl(avatarResponse.renderUrl);
+                const profileResponse = await profileAPI.getProfile();
+                if (profileResponse.success) {
+                  setFormData({
+                    ...formData,
+                    profilePicture: profileResponse.user.profilePicture || null,
+                  });
+                  if (profileResponse.user.profilePicture) {
+                    setPreview(profileResponse.user.profilePicture);
+                    setAvatarRenderUrl(profileResponse.user.profilePicture);
+                  } else {
+                    // Fallback: Get avatar render directly
+                    const avatarResponse = await avatarAPI.getAvatarRender({
+                      size: 400,
+                      quality: 90,
+                      camera: "portrait",
+                    });
+                    if (avatarResponse.success) {
+                      setPreview(avatarResponse.renderUrl);
+                      setAvatarRenderUrl(avatarResponse.renderUrl);
+                    }
+                  }
+                  // Update user in context
+                  if (setUser) {
+                    setUser(profileResponse.user);
+                  }
                 }
               } catch (err) {
-                console.error("Failed to load avatar render:", err);
+                console.error("Failed to reload profile:", err);
+                // Fallback: Get avatar render directly
+                try {
+                  const avatarResponse = await avatarAPI.getAvatarRender({
+                    size: 400,
+                    quality: 90,
+                    camera: "portrait",
+                  });
+                  if (avatarResponse.success) {
+                    setPreview(avatarResponse.renderUrl);
+                    setAvatarRenderUrl(avatarResponse.renderUrl);
+                  }
+                } catch (renderErr) {
+                  console.error("Failed to load avatar render:", renderErr);
+                }
               }
               
               setSuccess(true);
