@@ -50,6 +50,7 @@ const Login = () => {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
+            <img src="/logo.png" alt="StyleGPT" className="login-logo" />
             <h1>
               Welcome to <span className="brand-name">StyleGPT</span>
             </h1>

@@ -18,12 +18,22 @@
 
     .logo-link {
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       cursor: pointer;
       transition: transform 0.2s ease;
 
       &:hover {
         transform: scale(1.02);
+      }
+
+      .logo-image {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+        transition: all 0.2s ease;
       }
 
       .logo {
@@ -46,9 +56,25 @@
         color: var(--accent-2);
       }
 
+      &:hover .logo-image {
+        filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(198, 246, 141, 0.6));
+      }
+
       @media (max-width: 768px) {
+        gap: 8px;
+
+        .logo-image {
+          height: 32px;
+        }
+
         .logo {
           font-size: 18px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          display: none;
         }
       }
     }

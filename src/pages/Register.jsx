@@ -59,6 +59,7 @@ const Register = () => {
       <div className="register-container">
         <div className="register-card">
           <div className="register-header">
+            <img src="/logo.png" alt="StyleGPT" className="register-logo" />
             <h1>Welcome to <span className="brand-name">StyleGPT</span></h1>
             <h2>Create Your Account</h2>
             <p>Join StyleGPT and start organizing your wardrobe with AI-powered fashion assistance</p>

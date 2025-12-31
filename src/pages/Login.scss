@@ -27,12 +27,25 @@
 
     .login-header {
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .login-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 20px;
+        filter: brightness(0) invert(1);
+        animation: logoFloat 3s ease-in-out infinite;
+      }
 
       h1 {
         margin: 0 0 20px;
         font-size: 28px;
         font-weight: 700;
         color: var(--text);
+        text-align: center;
 
         .brand-name {
           color: var(--accent);
@@ -302,10 +315,26 @@
   }
 }
 
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @media (max-width: 520px) {
   .login-page {
     .login-card {
       padding: 22px;
+
+      .login-header {
+        .login-logo {
+          width: 60px;
+          height: 60px;
+        }
+      }
     }
   }
 }

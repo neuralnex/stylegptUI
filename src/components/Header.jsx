@@ -21,6 +21,7 @@ const Header = () => {
     <div className="header">
       <div className="container">
         <Link to="/" className="logo-link">
+          <img src="/logo.png" alt="StyleGPT" className="logo-image" />
           <h1 className="logo">StyleGPT</h1>
         </Link>
         <div className={active ? `nav active` : `nav`}>
