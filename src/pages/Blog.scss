@@ -1,70 +1,88 @@
 .blog-page {
   min-height: 100vh;
-  background-color: var(--bgb);
+  background: var(--bg);
   display: flex;
   flex-direction: column;
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 
   .blog-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 48px 24px;
   }
 
   .coming-soon-card {
     max-width: 600px;
     width: 100%;
-    background-color: var(--bgsb);
-    border-radius: 2rem;
-    padding: 5rem 4rem;
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 64px 48px;
     border: 1px solid var(--border);
     text-align: center;
+    box-shadow: 0 16px 60px rgba(0, 0, 0, 0.35);
 
     .coming-soon-icon {
-      font-size: 6rem;
-      margin-bottom: 2rem;
+      font-size: 72px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 20px rgba(239, 71, 111, 0.4));
     }
 
     h1 {
-      font-size: 4rem;
-      margin-bottom: 2rem;
-      color: var(--bgw);
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text);
+
+      .accent {
+        color: var(--accent);
+      }
     }
 
     p {
-      font-size: 1.8rem;
-      color: #9e9d9a;
+      font-size: 16px;
+      color: var(--muted);
       line-height: 1.6;
-      margin-bottom: 3rem;
+      margin-bottom: 32px;
     }
 
     .features-preview {
       display: flex;
       justify-content: center;
-      gap: 3rem;
+      gap: 24px;
       flex-wrap: wrap;
-      margin-top: 3rem;
+      margin-top: 32px;
 
       .feature-item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
-        padding: 1.5rem;
-        background-color: var(--bgb);
-        border-radius: 1rem;
+        gap: 12px;
+        padding: 20px;
+        background: #0b0d16;
+        border-radius: 12px;
         border: 1px solid var(--border);
-        min-width: 120px;
+        min-width: 140px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          border-color: var(--accent-2);
+          box-shadow: 0 4px 12px rgba(198, 246, 141, 0.2);
+        }
 
         .feature-icon {
-          font-size: 2.5rem;
+          font-size: 32px;
+          color: var(--accent-2);
         }
 
         span:last-child {
-          font-size: 1.4rem;
-          color: var(--bgw);
-          font-family: "Roboto Mono", monospace;
+          font-size: 14px;
+          color: var(--text);
+          font-family: "Inter", monospace;
+          font-weight: 600;
         }
       }
     }
@@ -74,37 +92,37 @@
 @media (max-width: 768px) {
   .blog-page {
     .blog-container {
-      padding: 2rem 1rem;
+      padding: 32px 16px;
     }
 
     .coming-soon-card {
-      padding: 3rem 2rem;
+      padding: 48px 32px;
 
       .coming-soon-icon {
-        font-size: 5rem;
+        font-size: 64px;
       }
 
       h1 {
-        font-size: 3rem;
+        font-size: 28px;
       }
 
       p {
-        font-size: 1.6rem;
+        font-size: 15px;
       }
 
       .features-preview {
-        gap: 1.5rem;
+        gap: 16px;
 
         .feature-item {
-          min-width: 100px;
-          padding: 1rem;
+          min-width: 120px;
+          padding: 16px;
 
           .feature-icon {
-            font-size: 2rem;
+            font-size: 28px;
           }
 
           span:last-child {
-            font-size: 1.3rem;
+            font-size: 13px;
           }
         }
       }
@@ -115,17 +133,16 @@
 @media (max-width: 480px) {
   .blog-page {
     .coming-soon-card {
-      padding: 2rem 1.5rem;
+      padding: 32px 24px;
 
       h1 {
-        font-size: 2.5rem;
+        font-size: 24px;
       }
 
       .features-preview {
         flex-direction: column;
-        gap: 1rem;
+        gap: 12px;
       }
     }
   }
 }
-

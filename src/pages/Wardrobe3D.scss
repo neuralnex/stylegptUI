@@ -1,7 +1,8 @@
 .wardrobe3d-page {
   min-height: 100vh;
-  background: var(--deep-space-black);
-  color: var(--plasma-white);
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 
   .wardrobe3d-container {
     display: flex;
@@ -9,23 +10,21 @@
     padding: 20px;
     gap: 20px;
 
-      .controls-panel {
+    .controls-panel {
       width: 300px;
-      background: var(--soft-graphite);
-      backdrop-filter: blur(15px);
-      border-radius: 12px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
       padding: 20px;
       overflow-y: auto;
-      border: 1px solid var(--chrome-silver);
-      box-shadow: 0 0 20px rgba(77, 168, 255, 0.1), inset 0 0 20px rgba(200, 214, 247, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 
       h2 {
         margin: 0 0 20px 0;
-        font-size: 24px;
-        color: var(--plasma-white);
-        font-family: "Orbitron", "Space Grotesk", sans-serif;
-        font-weight: 300;
-        letter-spacing: 0.02em;
+        font-size: 22px;
+        color: var(--text);
+        font-weight: 700;
       }
 
       .control-group {
@@ -37,11 +36,13 @@
           gap: 8px;
           cursor: pointer;
           font-size: 14px;
+          color: var(--text);
 
           input[type="checkbox"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: var(--accent);
           }
         }
       }
@@ -52,54 +53,54 @@
         h3 {
           font-size: 16px;
           margin-bottom: 12px;
-          color: var(--plasma-white);
-          font-family: "Orbitron", "Space Grotesk", sans-serif;
-          font-weight: 300;
+          color: var(--text);
+          font-weight: 600;
         }
 
         .category-group {
           margin-bottom: 8px;
 
           .category-item {
-            padding: 10px;
-            background: rgba(30, 31, 38, 0.6);
-            border-radius: 8px;
+            padding: 10px 12px;
+            background: rgba(239, 71, 111, 0.08);
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(77, 168, 255, 0.2);
+            border: 1px solid var(--border);
 
             &:hover {
-              background: rgba(77, 168, 255, 0.1);
-              border-color: var(--cyber-blue);
+              background: rgba(239, 71, 111, 0.15);
+              border-color: var(--accent);
               transform: translateX(5px);
-              box-shadow: 0 0 15px rgba(77, 168, 255, 0.2);
+              box-shadow: 0 4px 12px rgba(239, 71, 111, 0.2);
             }
 
             &.selected {
-              background: rgba(164, 92, 255, 0.2);
-              border: 1px solid var(--neon-violet);
-              color: var(--neon-violet);
-              box-shadow: 0 0 15px rgba(164, 92, 255, 0.3);
+              background: rgba(198, 246, 141, 0.15);
+              border: 1px solid var(--accent-2);
+              color: var(--accent-2);
+              box-shadow: 0 4px 12px rgba(198, 246, 141, 0.2);
             }
 
             .category-name {
-              font-weight: 500;
+              font-weight: 600;
               text-transform: capitalize;
+              color: var(--text);
             }
 
             .category-count {
               font-size: 12px;
-              opacity: 0.7;
+              color: var(--muted);
             }
           }
 
           .category-items-list {
             margin-top: 8px;
             padding-left: 10px;
-            border-left: 2px solid var(--cyber-blue);
+            border-left: 2px solid var(--accent);
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -108,23 +109,24 @@
               display: flex;
               align-items: center;
               gap: 8px;
-              padding: 6px;
-              background: rgba(30, 31, 38, 0.4);
-              border-radius: 6px;
+              padding: 8px;
+              background: #0b0d16;
+              border-radius: 8px;
               transition: all 0.2s ease;
-              border: 1px solid rgba(77, 168, 255, 0.1);
+              border: 1px solid var(--border);
 
               &:hover {
-                background: rgba(77, 168, 255, 0.1);
-                border-color: var(--cyber-blue);
+                background: rgba(239, 71, 111, 0.1);
+                border-color: var(--accent);
               }
 
               .item-preview {
                 width: 32px;
                 height: 32px;
-                border-radius: 4px;
+                border-radius: 6px;
                 overflow: hidden;
                 flex-shrink: 0;
+                border: 1px solid var(--border);
 
                 img {
                   width: 100%;
@@ -137,26 +139,26 @@
                 flex: 1;
                 font-size: 12px;
                 text-transform: capitalize;
-                opacity: 0.8;
-                font-family: "JetBrains Mono", monospace;
-                color: var(--chrome-silver);
+                color: var(--muted);
+                font-family: "Inter", monospace;
               }
 
               .delete-item-btn {
-                background: rgba(255, 111, 216, 0.2);
-                border: 1px solid var(--holo-pink);
-                border-radius: 4px;
+                background: rgba(239, 71, 111, 0.15);
+                border: 1px solid var(--accent);
+                border-radius: 6px;
                 padding: 4px 8px;
                 cursor: pointer;
-                font-size: 14px;
+                font-size: 12px;
                 transition: all 0.2s ease;
                 flex-shrink: 0;
-                color: var(--holo-pink);
+                color: var(--accent);
+                font-weight: 600;
 
                 &:hover {
-                  background: rgba(255, 111, 216, 0.4);
-                  transform: scale(1.1);
-                  box-shadow: 0 0 10px rgba(255, 111, 216, 0.5);
+                  background: rgba(239, 71, 111, 0.25);
+                  transform: scale(1.05);
+                  box-shadow: 0 4px 12px rgba(239, 71, 111, 0.3);
                 }
 
                 &:active {
@@ -171,13 +173,13 @@
       .instructions {
         margin-bottom: 20px;
         padding: 15px;
-        background: rgba(30, 31, 38, 0.6);
-        border-radius: 8px;
+        background: #0b0d16;
+        border-radius: 12px;
         font-size: 13px;
         line-height: 1.6;
-        border: 1px solid rgba(77, 168, 255, 0.2);
-        font-family: "JetBrains Mono", monospace;
-        color: var(--chrome-silver);
+        border: 1px solid var(--border);
+        font-family: "Inter", monospace;
+        color: var(--muted);
 
         p {
           margin: 5px 0;
@@ -187,33 +189,32 @@
       .back-btn {
         width: 100%;
         padding: 12px;
-        background: var(--soft-graphite);
-        border: 1px solid var(--cyber-blue);
-        border-radius: 14px;
-        color: var(--plasma-white);
+        background: var(--btn);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text);
         font-size: 14px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: "Space Grotesk", sans-serif;
-        font-weight: 500;
+        transition: all 0.2s ease;
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
 
         &:hover {
-          background: rgba(77, 168, 255, 0.2);
-          border-color: var(--neon-violet);
+          border-color: var(--accent-2);
           transform: translateY(-2px);
-          box-shadow: 0 0 15px rgba(77, 168, 255, 0.4);
+          box-shadow: 0 4px 12px rgba(198, 246, 141, 0.2);
         }
       }
     }
 
     .canvas-container {
       flex: 1;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      background: var(--deep-space-black);
-      border: 1px solid rgba(77, 168, 255, 0.3);
+      background: #0b0d16;
+      border: 1px solid var(--border);
       position: relative;
-      box-shadow: 0 0 30px rgba(77, 168, 255, 0.1);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 
       canvas {
         display: block;
@@ -232,45 +233,49 @@
     justify-content: center;
     height: calc(100vh - 80px);
     text-align: center;
+    padding: 32px;
 
     h2 {
       font-size: 28px;
+      font-weight: 700;
       margin-bottom: 10px;
+      color: var(--text);
     }
 
     p {
       font-size: 16px;
-      opacity: 0.8;
+      color: var(--muted);
       margin-bottom: 20px;
     }
 
     button {
       padding: 12px 24px;
-      background: var(--holographic-gradient);
+      background: var(--accent);
       border: none;
-      border-radius: 14px;
-      color: var(--deep-space-black);
+      border-radius: 999px;
+      color: #fff;
       font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 500;
-      box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+      font-family: "Inter", sans-serif;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 0 15px rgba(77, 168, 255, 0.7);
+        box-shadow: 0 10px 30px rgba(239, 71, 111, 0.3);
       }
     }
   }
 
   .loading-spinner {
-    font-size: 18px;
+    font-size: 24px;
     animation: pulse 2s ease-in-out infinite;
+    color: var(--accent-2);
   }
 
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
@@ -279,7 +284,6 @@
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .wardrobe3d-page {
     .wardrobe3d-container {
@@ -298,4 +302,3 @@
     }
   }
 }
-

@@ -1,44 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 :root {
-  /* ✨ MINIMAL LUXE - Color System */
-  
-  /* Primary Colors */
-  --porcelain-white: #FFFFFF;
-  --soft-cream: #FAF6F1;
-  --charcoal: #1A1A1A;
-  
-  /* Accents */
-  --warm-nude: #DCC4A4;
-  --soft-gold: #C2A878;
-  
-  /* Functional */
-  --line-grey: #E6E6E6;
-  --shadow-light: rgba(0, 0, 0, 0.04);
+  /* Dark Theme - Matching Frontend */
+  --bg: #0d0f17;
+  --panel: #0f1224;
+  --card: #161a2e;
+  --text: #f5f6fb;
+  --muted: #9aa0b5;
+  --border: #1b1f33;
+  --accent: #ef476f;
+  --accent-2: #c6f68d;
+  --btn: #1a2035;
+  --input-border: #ef476f;
+  --input-text: #d8d9e1;
   
   /* Legacy compatibility */
-  --color-bg-base: var(--porcelain-white);
-  --color-secondary: var(--charcoal);
-  --color-highlight: var(--warm-nude);
-  --color-accent: var(--soft-gold);
-  --color-neutral-light: var(--soft-cream);
-  
-  --bgb: var(--porcelain-white);
-  --bgw: var(--charcoal);
-  --bgsb: var(--soft-cream);
-  --bg-card: var(--porcelain-white);
-  --border: var(--line-grey);
-  --brand-gradient: none;
-  --shadow-soft: 0 2px 8px var(--shadow-light);
-  
-  /* Legacy compatibility - neutralized */
-  --neon-cyan: var(--charcoal);
-  --neon-magenta: var(--charcoal);
-  --neon-blue: var(--charcoal);
-  --neon-green: var(--charcoal);
-  --neon-yellow: var(--charcoal);
-  --neon-pink: var(--charcoal);
-  --neon-purple: var(--charcoal);
+  --bgb: #0f1224;
+  --bgw: #f5f6fb;
+  --bgsb: #161a2e;
+  --bg-card: #0f1224;
+  --bgp: #ef476f;
+  --color-bg-base: var(--bg);
+  --color-secondary: var(--text);
+  --shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 *,
@@ -55,30 +39,30 @@
 html {
   font-size: 62.5%;
   scrollbar-width: thin;
-  scrollbar-color: var(--line-grey) var(--porcelain-white);
+  scrollbar-color: var(--border) var(--bg);
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--porcelain-white);
+    background: var(--bg);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--line-grey);
-    border-radius: 0;
+    background: var(--border);
+    border-radius: 4px;
   }
 }
 
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background: var(--porcelain-white);
+  background: var(--bg);
   background-attachment: fixed;
-  color: var(--charcoal);
+  color: var(--text);
   overflow-x: hidden;
   position: relative;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
 }
 
@@ -100,15 +84,15 @@ body {
   max-width: 100vw;
   position: relative;
   z-index: 1;
-  background: var(--porcelain-white);
+  background: var(--bg);
 }
 
 p {
   font-family: "Inter", sans-serif;
   font-size: 1.4rem;
   line-height: 1.8;
-  color: var(--charcoal);
-  font-weight: 300;
+  color: var(--text);
+  font-weight: 400;
 }
 
 a {
@@ -125,35 +109,35 @@ img {
 }
 
 h1 {
-  font-family: "Playfair Display", "Cormorant Garamond", serif;
-  font-size: 4rem;
-  font-weight: 300;
-  color: var(--charcoal);
-  letter-spacing: 0.02em;
-  line-height: 1.3;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0;
+  line-height: 1.2;
 
   @media (max-width: 768px) {
-    font-size: 3rem;
+    font-size: 2.4rem;
   }
 
   @media (max-width: 400px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
 h2 {
-  font-family: "Playfair Display", "Cormorant Garamond", serif;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  color: var(--charcoal);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text);
 }
 
 h3 {
-  font-family: "Playfair Display", "Cormorant Garamond", serif;
-  font-size: 3rem;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  color: var(--charcoal);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text);
 }
 
 li {
@@ -172,51 +156,54 @@ button {
   overflow: hidden;
 }
 
-/* Primary Button - Minimal Border Only */
+/* Primary Button */
 .btn-p {
-  font-size: 1.4rem;
-  background: var(--porcelain-white);
-  color: var(--charcoal);
+  font-size: 1.5rem;
+  background: var(--accent);
+  color: #fff;
   text-transform: none;
-  font-weight: 300;
-  letter-spacing: 0.08em;
-  border-radius: 0;
-  padding: 1rem 2rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  border-radius: 999px;
+  padding: 1.4rem 2rem;
   box-shadow: none;
-  border: 1px solid var(--charcoal);
+  border: none;
   position: relative;
-  transition: all 0.3s ease;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
   white-space: nowrap;
   font-family: "Inter", sans-serif;
+  cursor: pointer;
 
   &-big {
-    font-size: 1.5rem;
-    padding: 1.2rem 2.5rem;
+    font-size: 1.6rem;
+    padding: 1.6rem 2.5rem;
   }
 
   @media (max-width: 768px) {
-    font-size: 1.3rem;
-    padding: 0.9rem 1.8rem;
+    font-size: 1.4rem;
+    padding: 1.2rem 1.8rem;
     width: 100%;
   }
 
   @media (max-width: 400px) {
-    font-size: 1.2rem;
-    padding: 0.8rem 1.5rem;
+    font-size: 1.3rem;
+    padding: 1rem 1.5rem;
   }
 
   &:hover {
-    background: rgba(26, 26, 26, 0.1);
-    transform: none;
+    box-shadow: 0 10px 30px rgba(239, 71, 111, 0.3);
+    transform: translateY(-1px);
   }
 
-  &:active {
-    transform: none;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
   }
 }
 
 .CircleIco {
-  background: transparent;
+  background: var(--btn);
   backdrop-filter: none;
   border-radius: 50%;
   overflow: hidden;
@@ -225,14 +212,14 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--charcoal);
+  border: 1px solid var(--border);
   box-shadow: none;
   transition: all 0.3s ease;
 
   svg {
     margin-top: 6px;
     width: 30px;
-    fill: var(--charcoal);
+    fill: var(--text);
     filter: none;
     transition: all 0.3s ease;
 
@@ -242,33 +229,33 @@ button {
   }
 
   &:hover {
-    border-color: var(--warm-nude);
-    transform: none;
+    border-color: var(--accent-2);
+    transform: translateY(-1px);
     
     svg {
-      fill: var(--warm-nude);
+      fill: var(--accent-2);
     }
   }
 }
 
-/* Secondary Button - Ghost (No Border) */
+/* Secondary Button - Ghost */
 .btn-s {
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
-  font-size: 1.8rem;
-  text-transform: uppercase;
+  font-size: 1.5rem;
+  text-transform: none;
   gap: 1rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   cursor: pointer;
-  color: var(--charcoal);
-  font-weight: 300;
-  transition: all 0.3s ease;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 1rem 2rem;
-  font-family: "Montserrat", sans-serif;
+  color: var(--text);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background: var(--btn);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.4rem;
+  font-family: "Inter", sans-serif;
 
   &-90 {
     .CircleIco {
@@ -282,7 +269,8 @@ button {
   }
 
   &:hover {
-    color: var(--warm-nude);
+    border-color: var(--accent-2);
+    transform: translateY(-1px);
     
     .CircleIco {
       svg {
@@ -294,27 +282,28 @@ button {
   }
 }
 
-// Minimal text utilities
+// Text utilities
 .editorial-text {
-  font-family: "Playfair Display", "Cormorant Garamond", serif;
-  color: var(--charcoal);
-  font-weight: 300;
+  font-family: "Inter", sans-serif;
+  color: var(--text);
+  font-weight: 400;
 }
 
 .label-text {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 300;
-  color: var(--charcoal);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--muted);
 }
 
-// Minimal card effect
+// Card effect
 .glass {
-  background: var(--porcelain-white);
-  backdrop-filter: none;
-  border: 1px solid var(--line-grey);
-  box-shadow: 0 2px 8px var(--shadow-light);
+  background: var(--panel);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 // Animated border

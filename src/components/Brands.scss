@@ -1,125 +1,88 @@
 .brands {
-  padding: 1rem;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+  padding: 48px 24px;
+  background: var(--bg);
 
   .container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    width: 100%;
-    max-width: 100%;
-    .item {
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-      background-size: cover !important;
-      background-attachment: scroll !important;
-      border-radius: 1rem;
-      overflow: hidden;
-      width: 100%;
-      max-width: 100%;
-      height: 500px;
-      position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
 
-      @media (max-width: 768px) {
-        height: 350px;
-      }
+    h2 {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: var(--text);
+    }
 
-      @media (max-width: 480px) {
-        height: 300px;
-      }
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
 
-      .lower-text {
-        position: absolute;
-        bottom: 0rem;
-        left: 0rem;
+      .brand-card {
+        background: var(--panel);
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-        width: 100%;
-        padding: 2rem;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        text-align: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
 
-        h1 {
-          text-transform: uppercase;
+        &:hover {
+          border-color: var(--accent-2);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(198, 246, 141, 0.2);
         }
 
-        button {
-          padding: 0;
-          font-weight: 400;
-        }
-
-        &-btns {
+        .brand-logo {
+          width: 80px;
+          height: 80px;
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 2rem;
+          justify-content: center;
+          font-size: 48px;
+        }
 
-          span {
-            background-color: #ffffff31;
-            backdrop-filter: blur(6px);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            padding: 0.5rem 1rem;
-            font-weight: 400;
-            font-family: "Roboto Mono", monospace;
-            border-radius: 3px;
-            border: 1px solid var(--border);
-          }
+        h3 {
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--text);
+        }
+
+        p {
+          font-size: 14px;
+          color: var(--muted);
+          line-height: 1.5;
         }
       }
     }
   }
 }
 
-.brandTag {
-  background-color: #ffffff31;
-  backdrop-filter: blur(6px);
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  font-weight: 400;
-  font-family: "Roboto Mono", monospace;
-  border-radius: 3px;
-  border: 1px solid var(--border);
-}
+@media (max-width: 768px) {
+  .brands {
+    padding: 32px 16px;
 
-.main-text {
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 4rem;
-  gap: 2rem;
-  button {
-    padding: 0;
-    white-space: nowrap;
-  }
+    .container {
+      h2 {
+        font-size: 28px;
+        margin-bottom: 32px;
+      }
 
-  h2 {
-    font-size: 3rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    line-height: 1.2;
-  }
+      .brands-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
 
-  @media (max-width: 768px) {
-    padding: 1rem 2rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-
-    h2 {
-      font-size: 2.5rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-    h2 {
-      font-size: 2rem;
+        .brand-card {
+          padding: 24px;
+        }
+      }
     }
   }
 }
