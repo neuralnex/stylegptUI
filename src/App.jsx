@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./layout/Home";
 import Chat from "./pages/Chat";
-import FashionChat from "./pages/FashionChat";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Upload from "./pages/Upload";
@@ -16,7 +15,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/fashion-chat" element={<FashionChat />} />
+        <Route path="/fashion-chat" element={<Chat initialMode="fashion" />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/upload" element={<Upload />} />

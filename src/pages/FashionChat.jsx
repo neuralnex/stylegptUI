@@ -166,32 +166,32 @@ const FashionChat = () => {
           // Stream complete
         } else if (data.type === "error") {
           throw new Error(data.message);
-        }
+      }
       }
 
       // Format and finalize the message
       let formattedContent = formatMessage(fullContent);
-      
+        
       // Cleanup trailing corrupted text
-      const sentences = formattedContent.split(/[.!?]\s+/);
-      if (sentences.length > 1) {
-        const lastSentence = sentences[sentences.length - 1];
-        if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
-          sentences.pop();
-          formattedContent = sentences.join(". ").trim();
-          if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
-            formattedContent += ".";
+        const sentences = formattedContent.split(/[.!?]\s+/);
+        if (sentences.length > 1) {
+          const lastSentence = sentences[sentences.length - 1];
+          if (lastSentence.length < 5 || /^[a-z]+$/.test(lastSentence.trim())) {
+            sentences.pop();
+            formattedContent = sentences.join(". ").trim();
+            if (!formattedContent.endsWith('.') && !formattedContent.endsWith('!') && !formattedContent.endsWith('?')) {
+              formattedContent += ".";
+            }
           }
         }
-      }
-
+        
       // Update to final message
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === streamingMessageId
             ? {
                 ...msg,
-                content: formattedContent || "I'm here to help with fashion advice!",
+          content: formattedContent || "I'm here to help with fashion advice!",
                 isStreaming: false,
               }
             : msg
@@ -205,9 +205,9 @@ const FashionChat = () => {
           msg.id === streamingMessageId
             ? {
                 ...msg,
-                content: error.message?.includes("Failed to fetch")
-                  ? "Unable to connect to the server. Please check your internet connection and try again."
-                  : "I'm having trouble connecting right now. Please try again.",
+        content: error.message?.includes("Failed to fetch")
+          ? "Unable to connect to the server. Please check your internet connection and try again."
+          : "I'm having trouble connecting right now. Please try again.",
                 isStreaming: false,
               }
             : msg

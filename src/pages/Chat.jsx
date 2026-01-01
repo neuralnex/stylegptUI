@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { suggestAPI } from "../utils/api";
+import { suggestAPI, fashionChatAPI, avatarAPI } from "../utils/api";
 import { formatMessage, getSessionId, saveMessages, loadMessages } from "../utils/chatUtils";
 import "./FashionChat.scss";
 
-const Chat = () => {
+const Chat = ({ initialMode = "wardrobe" }) => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
@@ -13,16 +13,15 @@ const Chat = () => {
   const [loading, setLoading] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const fileInputRef = useRef(null);
-  const [sessionId, setSessionId] = useState(() => {
-    if (user?.id) {
-      return getSessionId("wardrobe_chat_session", user.id);
-    }
-    return null;
-  });
+  const [useWardrobeMode, setUseWardrobeMode] = useState(initialMode !== "fashion");
+  const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const STORAGE_KEY = "wardrobe_chat_messages";
-  const SESSION_KEY = "wardrobe_chat_session";
+
+  const getStorageKey = (wardrobeMode) =>
+    wardrobeMode ? "wardrobe_chat_messages" : "fashion_chat_messages";
+  const getSessionKey = (wardrobeMode) =>
+    wardrobeMode ? "wardrobe_chat_session" : "fashion_chat_session";
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -30,27 +29,23 @@ const Chat = () => {
       return;
     }
 
-    // Load session and messages
     if (user?.id) {
-      const savedSessionId = getSessionId(SESSION_KEY, user.id);
+      const savedSessionId = getSessionId(getSessionKey(useWardrobeMode), user.id);
       setSessionId(savedSessionId);
-      const savedMessages = loadMessages(STORAGE_KEY);
-      if (savedMessages.length > 0) {
-        setMessages(savedMessages);
-      }
+      const savedMessages = loadMessages(getStorageKey(useWardrobeMode));
+      setMessages(savedMessages.length > 0 ? savedMessages : []);
     }
-  }, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate, useWardrobeMode]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    // Save messages whenever they change
     if (messages.length > 0) {
-      saveMessages(STORAGE_KEY, messages);
+      saveMessages(getStorageKey(useWardrobeMode), messages);
     }
-  }, [messages]);
+  }, [messages, useWardrobeMode]);
 
   useEffect(() => {
     // Focus input on mount
@@ -61,14 +56,12 @@ const Chat = () => {
     e.preventDefault();
     if (!inputMessage.trim() || loading) return;
     
-    // Ensure sessionId is set before sending
     if (!sessionId && user?.id) {
-      const newSessionId = getSessionId(SESSION_KEY, user.id);
+      const newSessionId = getSessionId(getSessionKey(useWardrobeMode), user.id);
       setSessionId(newSessionId);
-      // Use the new sessionId for this request
       return handleSendWithSession(e, newSessionId);
     }
-    
+
     if (!sessionId) {
       console.error("Session ID not available");
       return;
@@ -147,15 +140,21 @@ const Chat = () => {
       let selectedItems = [];
       let avatarWithOutfitUrl = null;
 
-      // Use streaming API
-      for await (const data of suggestAPI.getSuggestionStream(
-        userMessage || "What do you see in these images?",
-        currentSessionId,
-        imageUrls
-      )) {
+      const stream = useWardrobeMode
+        ? suggestAPI.getSuggestionStream(
+            userMessage || "What do you see in these images?",
+            currentSessionId,
+            imageUrls
+          )
+        : fashionChatAPI.sendMessageStream(
+            userMessage || "What do you see in these images?",
+            currentSessionId,
+            imageUrls
+          );
+
+      for await (const data of stream) {
         if (data.type === "chunk" && data.content) {
           fullContent += data.content;
-          // Update the streaming message
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === streamingMessageId
@@ -164,8 +163,10 @@ const Chat = () => {
             )
           );
         } else if (data.type === "done") {
-          selectedItems = data.selectedItems || [];
-          avatarWithOutfitUrl = data.avatarWithOutfitUrl || null;
+          if (useWardrobeMode) {
+            selectedItems = data.selectedItems || [];
+            avatarWithOutfitUrl = data.avatarWithOutfitUrl || null;
+          }
         } else if (data.type === "error") {
           throw new Error(data.message);
         }
@@ -187,16 +188,19 @@ const Chat = () => {
         }
       }
 
-      // Update to final message with selected items and avatar
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === streamingMessageId
             ? {
                 ...msg,
-                content: formattedContent || "I'm here to help with outfit suggestions from your wardrobe!",
-                selectedItems: selectedItems,
-                avatarWithOutfitUrl: avatarWithOutfitUrl,
-                isSuggestion: selectedItems.length > 0,
+                content:
+                  formattedContent ||
+                  (useWardrobeMode
+                    ? "I'm here to help with outfit suggestions from your wardrobe!"
+                    : "I'm here to help with fashion advice!"),
+                selectedItems: useWardrobeMode ? selectedItems : undefined,
+                avatarWithOutfitUrl: useWardrobeMode ? avatarWithOutfitUrl : undefined,
+                isSuggestion: useWardrobeMode ? selectedItems.length > 0 : false,
                 isStreaming: false,
               }
             : msg
@@ -227,9 +231,9 @@ const Chat = () => {
   const handleClearChat = () => {
     if (window.confirm("Are you sure you want to clear this conversation?")) {
       setMessages([]);
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(getStorageKey(useWardrobeMode));
       if (user?.id) {
-        const newSessionId = getSessionId(SESSION_KEY, user.id);
+        const newSessionId = getSessionId(getSessionKey(useWardrobeMode), user.id);
         setSessionId(newSessionId);
       }
     }
@@ -243,7 +247,20 @@ const Chat = () => {
     <div className="fashion-chat-page">
       <div className="chat-top-bar">
         <div className="top-bar-content">
-          <h2>Chat with Wardrobe</h2>
+          <h2>{useWardrobeMode ? "Wardrobe Chat" : "Fashion Chat"}</h2>
+          <div className="mode-toggle">
+            <label className="toggle-label">
+              <span>Wardrobe</span>
+              <div className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={useWardrobeMode}
+                  onChange={() => setUseWardrobeMode((prev) => !prev)}
+                />
+                <span className="slider" />
+              </div>
+            </label>
+          </div>
           <div className="top-bar-actions">
             <button className="clear-btn" onClick={handleClearChat}>
               Clear Chat
@@ -259,19 +276,38 @@ const Chat = () => {
       <div className="messages-area">
         {messages.length === 0 ? (
           <div className="empty-state">
-            <h1>Chat with Wardrobe</h1>
-            <p>Get personalized outfit suggestions based on your uploaded wardrobe items</p>
-            <div className="suggestions">
-              <button onClick={() => setInputMessage("What should I wear for a casual dinner?")}>
-                What should I wear for a casual dinner?
-              </button>
-              <button onClick={() => setInputMessage("Suggest an outfit for a date")}>
-                Suggest an outfit for a date
-              </button>
-              <button onClick={() => setInputMessage("What can I wear to work?")}>
-                What can I wear to work?
-              </button>
-            </div>
+            <h1>{useWardrobeMode ? "Wardrobe Chat" : "Fashion Chat"}</h1>
+            {useWardrobeMode ? (
+              <>
+                <p>Get personalized outfit suggestions based on your uploaded wardrobe items</p>
+                <div className="suggestions">
+                  <button onClick={() => setInputMessage("What should I wear for a casual dinner?")}>
+                    What should I wear for a casual dinner?
+                  </button>
+                  <button onClick={() => setInputMessage("Suggest an outfit for a date")}>
+                    Suggest an outfit for a date
+                  </button>
+                  <button onClick={() => setInputMessage("What can I wear to work?")}>
+                    What can I wear to work?
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>Ask me anything about fashion, style, and clothing!</p>
+                <div className="suggestions">
+                  <button onClick={() => setInputMessage("What colors go well together?")}>
+                    What colors go well together?
+                  </button>
+                  <button onClick={() => setInputMessage("How do I style a blazer?")}>
+                    How do I style a blazer?
+                  </button>
+                  <button onClick={() => setInputMessage("What should I wear for a job interview?")}>
+                    What should I wear for a job interview?
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="messages-list">
@@ -297,7 +333,7 @@ const Chat = () => {
                     <div className="message-content">
                       {msg.content}
                     </div>
-                    {msg.type === "ai" && msg.avatarWithOutfitUrl && (
+                    {useWardrobeMode && msg.type === "ai" && msg.avatarWithOutfitUrl && (
                       <div className="avatar-outfit-preview">
                         <h4>Your Outfit Preview</h4>
                         <div className="avatar-3d-container">
@@ -314,7 +350,7 @@ const Chat = () => {
                         </div>
                       </div>
                     )}
-                    {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
+                    {useWardrobeMode && msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
                       <div className="selected-items">
                         <h4>Selected Items</h4>
                         <div className="items-grid">
@@ -372,7 +408,7 @@ const Chat = () => {
                         )}
                       </div>
                     )}
-                    {msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
+                    {useWardrobeMode && msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
                       <button 
                         className="suggest-another-btn"
                         onClick={async () => {
@@ -516,7 +552,11 @@ const Chat = () => {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Ask for outfit suggestions from your wardrobe..."
+                placeholder={
+                  useWardrobeMode
+                    ? "Ask for outfit suggestions from your wardrobe..."
+                    : "Message Fashion Chat..."
+                }
                 disabled={loading}
                 autoFocus
               />
@@ -537,7 +577,11 @@ const Chat = () => {
               </button>
             </div>
           </form>
-          <p className="input-hint">Wardrobe Chat uses your uploaded items to suggest outfits. You can also upload images!</p>
+          <p className="input-hint">
+            {useWardrobeMode
+              ? "Wardrobe Chat uses your uploaded items to suggest outfits. You can also upload images!"
+              : "Fashion Chat can make mistakes. Check important info. You can also upload images!"}
+          </p>
         </div>
       </div>
     </div>
