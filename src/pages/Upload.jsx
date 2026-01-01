@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Card, CardBody, CardHeader, CardFooter, Select, SelectItem, Image } from "@heroui/react";
 import { useAuth } from "../context/AuthContext";
 import { uploadAPI } from "../utils/api";
 import Header from "../components/Header";
-import { PrimaryBtn } from "../components/Btn";
 import "./Upload.scss";
 
 const Upload = () => {
@@ -81,82 +81,93 @@ const Upload = () => {
     <div className="upload-page">
       <Header />
       <div className="upload-container">
-        <div className="upload-header">
-          <h1>Upload Your Wardrobe</h1>
-          <p>Upload 1-20 images of your clothing, footwear, watches, and accessories. Our AI will automatically classify and organize them for you.</p>
-        </div>
-
-        <div className="upload-card">
-          <div className="upload-area">
-            <input
-              type="file"
-              id="file-input"
-              multiple
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={uploading}
-            />
-            <label htmlFor="file-input" className="file-label">
-              <div className="upload-icon">📷</div>
-              <div className="upload-text">
-                {files.length > 0
-                  ? `${files.length} file(s) selected`
-                  : "Click to choose images (1-20 files)"}
-              </div>
-              <div className="upload-hint">Supports: JPEG, PNG, WebP</div>
-            </label>
-          </div>
-
-          {files.length > 0 && (
-            <div className="file-preview">
-              <h3>Selected Files ({files.length})</h3>
-              <div className="preview-grid">
-                {files.slice(0, 8).map((file, index) => (
-                  <div key={index} className="preview-item">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`Preview ${index + 1}`}
-                    />
-                    <span>{file.name.length > 20 ? file.name.substring(0, 20) + "..." : file.name}</span>
-                  </div>
-                ))}
-                {files.length > 8 && (
-                  <div className="preview-more">+{files.length - 8} more</div>
-                )}
-              </div>
+        <Card className="upload-card" radius="lg" shadow="md">
+          <CardHeader className="upload-header">
+            <div>
+              <h1>Upload Your Wardrobe</h1>
+              <p>
+                Upload 1-20 images of your clothing, footwear, watches, and accessories. Our AI will
+                automatically classify and organize them for you.
+              </p>
             </div>
-          )}
-
-          {files.length > 0 && (
-            <div className="style-selection">
-              <label htmlFor="style-select">Select Style for These Items:</label>
-              <select
-                id="style-select"
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value)}
+          </CardHeader>
+          <CardBody className="upload-body">
+            <div className="upload-area">
+              <input
+                type="file"
+                id="file-input"
+                multiple
+                accept="image/*"
+                onChange={handleFileChange}
                 disabled={uploading}
-              >
-                <option value="casual">Casual</option>
-                <option value="formal">Formal</option>
-                <option value="streetwear">Streetwear</option>
-                <option value="sportswear">Sportswear</option>
-              </select>
+              />
+              <label htmlFor="file-input" className="file-label">
+                <div className="upload-icon">📷</div>
+                <div className="upload-text">
+                  {files.length > 0
+                    ? `${files.length} file(s) selected`
+                    : "Click to choose images (1-20 files)"}
+                </div>
+                <div className="upload-hint">Supports: JPEG, PNG, WebP</div>
+              </label>
             </div>
-          )}
 
-          <PrimaryBtn
-            text={uploading ? "Uploading..." : "Upload Images"}
-            onClick={handleUpload}
-            disabled={uploading || files.length === 0}
-            className="upload-btn"
-          />
+            {files.length > 0 && (
+              <div className="file-preview">
+                <h3>Selected Files ({files.length})</h3>
+                <div className="preview-grid">
+                  {files.slice(0, 8).map((file, index) => (
+                    <div key={index} className="preview-item">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                      />
+                      <span>{file.name.length > 20 ? file.name.substring(0, 20) + "..." : file.name}</span>
+                    </div>
+                  ))}
+                  {files.length > 8 && (
+                    <div className="preview-more">+{files.length - 8} more</div>
+                  )}
+                </div>
+              </div>
+            )}
 
-          {message && (
-            <div className={`message ${message.includes("Success") ? "success" : "error"}`}>
-              {message}
-            </div>
-          )}
-        </div>
+            {files.length > 0 && (
+              <div className="style-selection">
+                <Select
+                  label="Select Style for These Items"
+                  selectedKeys={[selectedStyle]}
+                  onSelectionChange={(keys) => setSelectedStyle(Array.from(keys)[0])}
+                  isDisabled={uploading}
+                  variant="bordered"
+                >
+                  <SelectItem key="casual">Casual</SelectItem>
+                  <SelectItem key="formal">Formal</SelectItem>
+                  <SelectItem key="streetwear">Streetwear</SelectItem>
+                  <SelectItem key="sportswear">Sportswear</SelectItem>
+                </Select>
+              </div>
+            )}
+
+            {message && (
+              <div className={`message ${message.includes("Success") ? "success" : "error"}`}>
+                {message}
+              </div>
+            )}
+          </CardBody>
+          <CardFooter>
+            <Button
+              color="primary"
+              variant="solid"
+              fullWidth
+              isLoading={uploading}
+              isDisabled={uploading || files.length === 0}
+              onPress={handleUpload}
+            >
+              {uploading ? "Uploading..." : "Upload Images"}
+            </Button>
+          </CardFooter>
+        </Card>
 
         {uploadedItems.length > 0 && (
           <div className="uploaded-items">
@@ -164,7 +175,7 @@ const Upload = () => {
             <div className="items-grid">
               {uploadedItems.map((item) => (
                 <div key={item.id} className="item-card">
-                  <img src={item.imageUrl} alt={item.category} />
+                  <Image src={item.imageUrl} alt={item.category} radius="md" />
                   <div className="item-info">
                     <span className="category">{item.category}</span>
                     <span className="style">{item.style}</span>

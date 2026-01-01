@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
 import Header from "../components/Header";
+import { Image } from "@heroui/react";
 import "./Wardrobe.scss";
 
 const Wardrobe = () => {
@@ -176,7 +177,11 @@ const Wardrobe = () => {
                         >
                           ×
                         </button>
-                        <img src={item.processedImageUrl || item.imageUrl} alt={item.name || item.category} />
+                        <Image
+                          src={item.processedImageUrl || item.imageUrl}
+                          alt={item.name || item.category}
+                          radius="md"
+                        />
                         <div className="meta">
                           <div className="row">
                             <span className="category">{item.name || item.category}</span>
@@ -199,7 +204,11 @@ const Wardrobe = () => {
                       >
                         ×
                       </button>
-                      <img src={item.processedImageUrl || item.imageUrl} alt={item.name || item.category} />
+                      <Image
+                        src={item.processedImageUrl || item.imageUrl}
+                        alt={item.name || item.category}
+                        radius="md"
+                      />
                       <div className="meta">
                         <div className="row">
                           <span className="category">{item.name || item.category}</span>

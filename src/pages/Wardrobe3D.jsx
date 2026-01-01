@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { Image } from "@heroui/react";
 import Header from "../components/Header";
 import "./Wardrobe3D.scss";
 
@@ -609,11 +610,12 @@ const Wardrobe3D = () => {
                     {groupedItems[category].map((item) => (
                       <div key={item.id} className="item-in-category">
                         <span className="item-preview">
-                          <img 
-                            src={item.processedImageUrl || item.imageUrl} 
+                          <Image
+                            src={item.processedImageUrl || item.imageUrl}
                             alt={item.category}
+                            radius="md"
                             onError={(e) => {
-                              e.target.style.display = 'none';
+                              e.currentTarget.style.display = "none";
                             }}
                           />
                         </span>

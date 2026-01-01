@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Image } from "@heroui/react";
 import "./About.scss";
 import CircleIcon from "./CircleIcon";
 
@@ -31,9 +32,11 @@ const About = () => {
     <div className="About">
       <div className="container">
         <div className="image">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1524498250077-390f9e378fc0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"
             alt="about image"
+            radius="lg"
+            shadow="md"
           />
         </div>
         <div className="text">
@@ -66,7 +69,7 @@ const About = () => {
           ))}
         </div>
         <div className="col-2">
-          <img src={data[index].img} alt={data[index].text} />
+          <Image src={data[index].img} alt={data[index].text} radius="lg" shadow="md" />
         </div>
       </div>
     </div>

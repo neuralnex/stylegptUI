@@ -1,5 +1,5 @@
 import React from "react";
-import { SecondaryBtn } from "./Btn";
+import { Button } from "@heroui/react";
 import "./Brands.scss";
 
 const data = [
@@ -30,7 +30,9 @@ const Brands = () => {
     <div className="brands">
       <div className="main-text">
         <h2>Style Categories</h2>
-        <SecondaryBtn text={"Explore"} classText="btn-s-45" />
+        <Button variant="bordered" radius="full">
+          Explore
+        </Button>
       </div>
       <div className="container">
         {data.map((elem, index) => (
@@ -44,7 +46,9 @@ const Brands = () => {
             <div className="lower-text">
               <h1>{elem.text}</h1>
               <div className="lower-text-btns">
-                <SecondaryBtn text="View Style" classText={"btn-s-45"} />
+                <Button variant="bordered" radius="full">
+                  View Style
+                </Button>
                 <span className="brandTag">{elem.tag}</span>
               </div>
             </div>

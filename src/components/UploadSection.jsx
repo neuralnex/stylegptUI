@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { uploadAPI } from "../utils/api";
 import { PrimaryBtn } from "./Btn";
+import { Image } from "@heroui/react";
 import "./UploadSection.scss";
 
 const UploadSection = () => {
@@ -111,7 +112,7 @@ const UploadSection = () => {
             <div className="items-grid">
               {uploadedItems.map((item) => (
                 <div key={item.id} className="item-card">
-                  <img src={item.imageUrl} alt={item.category} />
+                  <Image src={item.imageUrl} alt={item.category} radius="md" />
                   <div className="item-info">
                     <span className="category">{item.category}</span>
                     <span className="style">{item.style}</span>

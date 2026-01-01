@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Card, CardBody, CardHeader, CardFooter, Input, Avatar, Divider } from "@heroui/react";
 import { useAuth } from "../context/AuthContext";
 import { profileAPI, avatarAPI } from "../utils/api";
 import "./Profile.scss";
@@ -69,7 +70,9 @@ const Profile = () => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     setError(null);
     setSuccess(false);
     setLoading(true);
@@ -196,109 +199,120 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="profile-container">
-        <div className="profile-header">
-          <h1>Profile Settings</h1>
-          <p>Manage your account information and profile picture</p>
-          <div className="profile-actions">
-            <button type="button" className="btn-p" onClick={() => navigate("/wardrobe")}>
-              View Wardrobe
-            </button>
-            <button 
-              type="button" 
-              className="btn-p" 
-              onClick={() => setShowAvatarCreator(true)}
-            >
-              {avatarId ? "Edit Avatar" : "Create Avatar"}
-            </button>
-          </div>
-        </div>
-
-        <form className="profile-form" onSubmit={handleSubmit}>
-          <div className="profile-picture-section">
-            <div className="picture-preview">
-              {preview ? (
-                <img src={preview} alt="Profile" className="profile-img" />
-              ) : (
-                <div className="profile-placeholder">
-                  <span className="placeholder-icon">👤</span>
-                  <p className="placeholder-text">Create an avatar to set your profile picture</p>
-                </div>
-              )}
-              <div className="picture-overlay">
-                {!avatarId && (
-                  <button
-                    type="button"
-                    className="create-avatar-btn"
-                    onClick={() => setShowAvatarCreator(true)}
-                  >
-                    Create Avatar
-                  </button>
-                )}
-                {avatarId && (
-                  <button
-                    type="button"
-                    className="edit-avatar-btn"
-                    onClick={() => setShowAvatarCreator(true)}
-                  >
-                    Edit Avatar
-                  </button>
-                )}
+        <Card className="profile-card" radius="lg" shadow="md">
+          <CardHeader className="profile-header">
+            <div>
+              <h1>Profile Settings</h1>
+              <p>Manage your account information and profile picture</p>
+              <div className="profile-actions">
+                <Button color="secondary" variant="flat" radius="full" onPress={() => navigate("/wardrobe")}>
+                  View Wardrobe
+                </Button>
+                <Button
+                  color="primary"
+                  variant="solid"
+                  radius="full"
+                  onPress={() => setShowAvatarCreator(true)}
+                >
+                  {avatarId ? "Edit Avatar" : "Create Avatar"}
+                </Button>
               </div>
             </div>
-            <p className="picture-hint">
-              {avatarId 
-                ? "Profile picture is generated from your Ready Player Me avatar" 
-                : "Create an avatar to automatically generate your profile picture"}
-            </p>
-          </div>
+          </CardHeader>
 
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Enter your name"
-              required
-            />
-          </div>
+          <Divider />
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email}
-              disabled
-              className="disabled-input"
-            />
-            <p className="field-hint">Email cannot be changed</p>
-          </div>
-
-          {error && (
-            <div className="error-message">
-              <span className="error-icon">⚠️</span>
-              {error}
+          <CardBody className="profile-body">
+            <div className="profile-picture-section">
+              <div className="picture-preview">
+                {preview ? (
+                  <Avatar
+                    src={preview}
+                    name={formData.name || "Profile"}
+                    className="profile-img"
+                    color="primary"
+                    isBordered
+                    radius="lg"
+                    size="xl"
+                  />
+                ) : (
+                  <div className="profile-placeholder">
+                    <span className="placeholder-icon">👤</span>
+                    <p className="placeholder-text">Create an avatar to set your profile picture</p>
+                  </div>
+                )}
+                <div className="picture-overlay">
+                  <Button
+                    size="sm"
+                    color="primary"
+                    variant="flat"
+                    radius="full"
+                    onPress={() => setShowAvatarCreator(true)}
+                  >
+                    {avatarId ? "Edit Avatar" : "Create Avatar"}
+                  </Button>
+                </div>
+              </div>
+              <p className="picture-hint">
+                {avatarId
+                  ? "Profile picture is generated from your Ready Player Me avatar"
+                  : "Create an avatar to automatically generate your profile picture"}
+              </p>
             </div>
-          )}
 
-          {success && (
-            <div className="success-message">
-              <span className="success-icon">✓</span>
-              Profile updated successfully!
+            <div className="form-group">
+              <Input
+                label="Full Name"
+                variant="bordered"
+                fullWidth
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Enter your name"
+                isRequired
+              />
             </div>
-          )}
 
-          <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={() => navigate("/")}>
+            <div className="form-group">
+              <Input
+                label="Email"
+                variant="bordered"
+                fullWidth
+                value={formData.email}
+                isDisabled
+              />
+              <p className="field-hint">Email cannot be changed</p>
+            </div>
+
+            {error && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="success-message">
+                <span className="success-icon">✓</span>
+                Profile updated successfully!
+              </div>
+            )}
+          </CardBody>
+
+          <CardFooter className="form-actions">
+            <Button variant="bordered" radius="full" onPress={() => navigate("/")}>
               Cancel
-            </button>
-            <button type="submit" className="btn-save" disabled={loading}>
+            </Button>
+            <Button
+              color="primary"
+              variant="solid"
+              radius="full"
+              isLoading={loading}
+              onPress={handleSubmit}
+            >
               {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </form>
+            </Button>
+          </CardFooter>
+        </Card>
 
         {showAvatarCreator && (
           <div className="avatar-creator-modal">

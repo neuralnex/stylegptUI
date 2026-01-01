@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from "@heroui/react";
 import "./CompanyLogos.scss";
 
 const companyLogo = [
@@ -15,7 +16,7 @@ const CompanyLogos = () => {
     <div className="companylogos">
       <div className="container">
         {companyLogo.map((elem, index) => (
-          <img src={elem} alt={index} key={index} />
+          <Image src={elem} alt={`Logo ${index + 1}`} key={index} radius="sm" />
         ))}
       </div>
     </div>

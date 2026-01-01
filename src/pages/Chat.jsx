@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { suggestAPI, fashionChatAPI, avatarAPI } from "../utils/api";
 import { formatMessage, getSessionId, saveMessages, loadMessages } from "../utils/chatUtils";
+import { Button, Card, CardBody, CardHeader, Image, Avatar, Input, Switch } from "@heroui/react";
+import { Link as RouterLink } from "react-router-dom";
 import "./FashionChat.scss";
 
 const Chat = ({ initialMode = "wardrobe" }) => {
@@ -17,6 +19,8 @@ const Chat = ({ initialMode = "wardrobe" }) => {
   const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const aiAvatar = "/logo.png";
+  const userAvatar = user?.profilePicture;
 
   const getStorageKey = (wardrobeMode) =>
     wardrobeMode ? "wardrobe_chat_messages" : "fashion_chat_messages";
@@ -247,15 +251,20 @@ const Chat = ({ initialMode = "wardrobe" }) => {
     <div className="fashion-chat-page">
       <div className="chat-top-bar">
         <div className="top-bar-content">
-          <h2>{useWardrobeMode ? "Wardrobe Chat" : "Fashion Chat"}</h2>
+          <div className="top-left">
+            <RouterLink to="/" className="chat-logo-link">
+              <Image src="/logo.png" alt="StyleGPT" className="chat-logo" radius="sm" />
+            </RouterLink>
+            <h2>{useWardrobeMode ? "Wardrobe Chat" : "Fashion Chat"}</h2>
+          </div>
           <div className="top-bar-actions">
-            <button className="clear-btn" onClick={handleClearChat}>
+            <Button variant="flat" color="secondary" radius="full" onPress={handleClearChat}>
               Clear Chat
-            </button>
+            </Button>
             <span className="user-name">{user?.name}</span>
-            <button className="logout-btn" onClick={logout}>
+            <Button variant="light" color="primary" radius="full" onPress={logout}>
               Logout
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -268,30 +277,30 @@ const Chat = ({ initialMode = "wardrobe" }) => {
               <>
                 <p>Get personalized outfit suggestions based on your uploaded wardrobe items</p>
                 <div className="suggestions">
-                  <button onClick={() => setInputMessage("What should I wear for a casual dinner?")}>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("What should I wear for a casual dinner?")}>
                     What should I wear for a casual dinner?
-                  </button>
-                  <button onClick={() => setInputMessage("Suggest an outfit for a date")}>
+                  </Button>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("Suggest an outfit for a date")}>
                     Suggest an outfit for a date
-                  </button>
-                  <button onClick={() => setInputMessage("What can I wear to work?")}>
+                  </Button>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("What can I wear to work?")}>
                     What can I wear to work?
-                  </button>
+                  </Button>
                 </div>
               </>
             ) : (
               <>
                 <p>Ask me anything about fashion, style, and clothing!</p>
                 <div className="suggestions">
-                  <button onClick={() => setInputMessage("What colors go well together?")}>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("What colors go well together?")}>
                     What colors go well together?
-                  </button>
-                  <button onClick={() => setInputMessage("How do I style a blazer?")}>
+                  </Button>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("How do I style a blazer?")}>
                     How do I style a blazer?
-                  </button>
-                  <button onClick={() => setInputMessage("What should I wear for a job interview?")}>
+                  </Button>
+                  <Button variant="flat" color="secondary" onPress={() => setInputMessage("What should I wear for a job interview?")}>
                     What should I wear for a job interview?
-                  </button>
+                  </Button>
                 </div>
               </>
             )}
@@ -302,16 +311,22 @@ const Chat = ({ initialMode = "wardrobe" }) => {
               <div key={index} className={`message-wrapper ${msg.type}`}>
                 <div className={`message-container ${msg.type === "user" ? "user-container" : "ai-container"}`}>
                   <div className="message-avatar">
-                    {msg.type === "user" ? "👤" : "🤖"}
+                    <Avatar
+                      src={msg.type === "user" ? userAvatar : aiAvatar}
+                      name={msg.type === "user" ? user?.name || "You" : "StyleGPT"}
+                      color={msg.type === "user" ? "secondary" : "primary"}
+                      size="md"
+                    />
                   </div>
                   <div className="message-content-wrapper">
                     {msg.images && msg.images.length > 0 && (
                       <div className="message-images">
                         {msg.images.map((imgUrl, imgIndex) => (
-                          <img
+                          <Image
                             key={imgIndex}
                             src={imgUrl}
                             alt={`Uploaded ${imgIndex + 1}`}
+                            radius="md"
                             className="message-image"
                           />
                         ))}
@@ -343,12 +358,16 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                         <div className="items-grid">
                           {msg.selectedItems.map((item, itemIndex) => (
                             <div key={itemIndex} className="item-card">
-                              <img 
-                                src={item.processedImageUrl || item.imageUrl} 
+                              <Image
+                                src={item.processedImageUrl || item.imageUrl}
                                 alt={item.category}
+                                radius="md"
                                 onError={(e) => {
-                                  e.target.src = item.imageUrl;
+                                  if (item.imageUrl) {
+                                    e.currentTarget.src = item.imageUrl;
+                                  }
                                 }}
+                                className="item-image"
                               />
                               <div className="item-info">
                                 <span className="item-category">{item.category}</span>
@@ -396,9 +415,12 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                       </div>
                     )}
                     {useWardrobeMode && msg.type === "ai" && msg.selectedItems && msg.selectedItems.length > 0 && (
-                      <button 
+                      <Button
                         className="suggest-another-btn"
-                        onClick={async () => {
+                        color="primary"
+                        variant="flat"
+                        radius="full"
+                        onPress={async () => {
                           if (loading) return;
                           const suggestMessage = "Suggest another outfit";
                           setInputMessage("");
@@ -471,10 +493,10 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                             setLoading(false);
                           }
                         }}
-                        disabled={loading}
+                        isDisabled={loading}
                       >
                         Suggest Another Outfit
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -503,34 +525,32 @@ const Chat = ({ initialMode = "wardrobe" }) => {
 
       <div className="input-area">
         <div className="input-top-row">
-          <div className="mode-toggle">
-            <label className="toggle-label">
-              <span>Wardrobe</span>
-              <div className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={useWardrobeMode}
-                  onChange={() => setUseWardrobeMode((prev) => !prev)}
-                />
-                <span className="slider" />
-              </div>
-            </label>
-          </div>
+          <Switch
+            isSelected={useWardrobeMode}
+            onValueChange={setUseWardrobeMode}
+            color="primary"
+          >
+            Use Wardrobe
+          </Switch>
         </div>
         <div className="chat-input-form">
           {selectedImages.length > 0 && (
             <div className="selected-images-preview">
               {selectedImages.map((img, index) => (
                 <div key={index} className="image-preview-item">
-                  <img src={img.url} alt={img.name} />
-                  <button
+                  <Image src={img.url} alt={img.name} radius="md" />
+                  <Button
                     type="button"
+                    color="danger"
+                    variant="light"
                     className="remove-image-btn"
-                    onClick={() => removeImage(index)}
+                    onPress={() => removeImage(index)}
                     aria-label="Remove image"
+                    size="sm"
+                    isIconOnly
                   >
                     ×
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -546,12 +566,19 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                 style={{ display: "none" }}
                 id="image-upload"
               />
-              <label htmlFor="image-upload" className="image-upload-btn" title="Upload images">
+              <Button
+                as="label"
+                htmlFor="image-upload"
+                isIconOnly
+                variant="flat"
+                color="secondary"
+                radius="full"
+                title="Upload images"
+              >
                 📷
-              </label>
-              <input
+              </Button>
+              <Input
                 ref={inputRef}
-                type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder={
@@ -559,13 +586,18 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                     ? "Ask for outfit suggestions from your wardrobe..."
                     : "Message Fashion Chat..."
                 }
-                disabled={loading}
-                autoFocus
+                isDisabled={loading}
+                fullWidth
+                variant="bordered"
+                radius="lg"
               />
-              <button
+              <Button
                 type="submit"
-                className="send-button"
-                disabled={loading || (!inputMessage.trim() && selectedImages.length === 0)}
+                color="primary"
+                variant="solid"
+                isIconOnly
+                radius="full"
+                isDisabled={loading || (!inputMessage.trim() && selectedImages.length === 0)}
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
@@ -576,7 +608,7 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </form>
           <p className="input-hint">

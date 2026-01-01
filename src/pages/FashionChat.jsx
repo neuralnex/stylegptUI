@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fashionChatAPI } from "../utils/api";
 import { formatMessage, getSessionId, saveMessages, loadMessages } from "../utils/chatUtils";
+import { Button, Image, Avatar, Input } from "@heroui/react";
 import "./FashionChat.scss";
 
 const FashionChat = () => {
@@ -24,6 +25,8 @@ const FashionChat = () => {
   const inputRef = useRef(null);
   const STORAGE_KEY = "fashion_chat_messages";
   const SESSION_KEY = "fashion_chat_session";
+  const aiAvatar = "/logo.png";
+  const userAvatar = user?.profilePicture;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -257,15 +260,15 @@ const FashionChat = () => {
             <h1>Fashion Chat</h1>
             <p>Ask me anything about fashion, style, and clothing!</p>
             <div className="suggestions">
-              <button onClick={() => setInputMessage("What colors go well together?")}>
+              <Button variant="flat" color="secondary" onPress={() => setInputMessage("What colors go well together?")}>
                 What colors go well together?
-              </button>
-              <button onClick={() => setInputMessage("How do I style a blazer?")}>
+              </Button>
+              <Button variant="flat" color="secondary" onPress={() => setInputMessage("How do I style a blazer?")}>
                 How do I style a blazer?
-              </button>
-              <button onClick={() => setInputMessage("What should I wear for a job interview?")}>
+              </Button>
+              <Button variant="flat" color="secondary" onPress={() => setInputMessage("What should I wear for a job interview?")}>
                 What should I wear for a job interview?
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
@@ -274,16 +277,22 @@ const FashionChat = () => {
               <div key={index} className={`message-wrapper ${msg.type}`}>
                 <div className={`message-container ${msg.type === "user" ? "user-container" : "ai-container"}`}>
                   <div className="message-avatar">
-                    {msg.type === "user" ? "👤" : "🤖"}
+                    <Avatar
+                      src={msg.type === "user" ? userAvatar : aiAvatar}
+                      name={msg.type === "user" ? user?.name || "You" : "StyleGPT"}
+                      color={msg.type === "user" ? "secondary" : "primary"}
+                      size="md"
+                    />
                   </div>
                   <div className="message-content-wrapper">
                     {msg.images && msg.images.length > 0 && (
                       <div className="message-images">
                         {msg.images.map((imgUrl, imgIndex) => (
-                          <img
+                          <Image
                             key={imgIndex}
                             src={imgUrl}
                             alt={`Uploaded ${imgIndex + 1}`}
+                            radius="md"
                             className="message-image"
                           />
                         ))}
@@ -323,15 +332,19 @@ const FashionChat = () => {
             <div className="selected-images-preview">
               {selectedImages.map((img, index) => (
                 <div key={index} className="image-preview-item">
-                  <img src={img.url} alt={img.name} />
-                  <button
+                  <Image src={img.url} alt={img.name} radius="md" />
+                  <Button
                     type="button"
+                    color="danger"
+                    variant="light"
                     className="remove-image-btn"
-                    onClick={() => removeImage(index)}
+                    onPress={() => removeImage(index)}
                     aria-label="Remove image"
+                    size="sm"
+                    isIconOnly
                   >
                     ×
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -347,22 +360,35 @@ const FashionChat = () => {
                 style={{ display: "none" }}
                 id="image-upload-fashion"
               />
-              <label htmlFor="image-upload-fashion" className="image-upload-btn" title="Upload images">
+              <Button
+                as="label"
+                htmlFor="image-upload-fashion"
+                isIconOnly
+                variant="flat"
+                color="secondary"
+                radius="full"
+                title="Upload images"
+              >
                 📷
-              </label>
-              <input
+              </Button>
+              <Input
                 ref={inputRef}
-                type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Message Fashion Chat..."
-                disabled={loading}
+                isDisabled={loading}
+                fullWidth
+                variant="bordered"
+                radius="lg"
                 autoFocus
               />
-              <button
+              <Button
                 type="submit"
-                className="send-button"
-                disabled={loading || (!inputMessage.trim() && selectedImages.length === 0)}
+                color="primary"
+                variant="solid"
+                isIconOnly
+                radius="full"
+                isDisabled={loading || (!inputMessage.trim() && selectedImages.length === 0)}
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
@@ -373,7 +399,7 @@ const FashionChat = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </form>
           <p className="input-hint">Fashion Chat can make mistakes. Check important info. You can also upload images!</p>

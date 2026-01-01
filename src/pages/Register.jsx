@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Input,
+  Link,
+  Spacer,
+  Image,
+} from "@heroui/react";
 import { useAuth } from "../context/AuthContext";
 import Header from "../components/Header";
-import { PrimaryBtn } from "../components/Btn";
 import "./Register.scss";
 
 const Register = () => {
@@ -57,73 +67,79 @@ const Register = () => {
     <div className="register-page">
       <Header />
       <div className="register-container">
-        <div className="register-card">
-          <div className="register-header">
-            <img src="/logo.png" alt="StyleGPT" className="register-logo" />
-            <h1>Welcome to <span className="brand-name">StyleGPT</span></h1>
-            <h2>Create Your Account</h2>
-            <p>Join StyleGPT and start organizing your wardrobe with AI-powered fashion assistance</p>
-          </div>
+        <Card className="register-card" radius="lg" shadow="md">
+          <CardHeader className="register-header">
+            <div className="register-header-content">
+              <Image src="/logo.png" alt="StyleGPT" className="register-logo" radius="md" />
+              <h1>
+                Welcome to <span className="brand-name">StyleGPT</span>
+              </h1>
+              <h2>Create Your Account</h2>
+              <p>
+                Join StyleGPT and start organizing your wardrobe with AI-powered
+                fashion assistance
+              </p>
+            </div>
+          </CardHeader>
 
-          <form className="register-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Full Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
+          <CardBody className="register-body">
+            <form className="register-form" onSubmit={handleSubmit}>
+              <Input
+                label="Full Name"
+                variant="bordered"
+                fullWidth
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your full name"
-                required
+                isRequired
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
+              <Spacer y={2} />
+              <Input
+                label="Email"
+                variant="bordered"
+                fullWidth
                 type="email"
-                id="email"
-                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                required
+                isRequired
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
+              <Spacer y={2} />
+              <Input
+                label="Password"
+                variant="bordered"
+                fullWidth
                 type="password"
-                id="password"
-                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password (min. 6 characters)"
-                required
                 minLength={6}
+                isRequired
               />
-            </div>
 
-            {error && <div className="error-message">{error}</div>}
+              {error && <div className="error-message">{error}</div>}
 
-            <PrimaryBtn
-              type="submit"
-              text={loading ? "Creating Account..." : "Sign Up"}
-              disabled={loading}
-            />
-          </form>
+              <Button
+                fullWidth
+                type="submit"
+                color="primary"
+                variant="solid"
+                isLoading={loading}
+              >
+                {loading ? "Creating Account..." : "Sign Up"}
+              </Button>
+            </form>
+          </CardBody>
 
-          <div className="register-footer">
+          <CardFooter className="register-footer">
             <p>
               Already have an account?{" "}
-              <Link to="/login" className="login-link">
+              <Link as={RouterLink} to="/login" color="primary">
                 Login here
               </Link>
             </p>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

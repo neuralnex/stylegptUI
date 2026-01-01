@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Input,
+  Link,
+  Spacer,
+  Image,
+} from "@heroui/react";
 import { useAuth } from "../context/AuthContext";
 import Header from "../components/Header";
-import { PrimaryBtn } from "../components/Btn";
 import "./Login.scss";
 
 const Login = () => {
@@ -48,88 +59,95 @@ const Login = () => {
     <div className="login-page">
       <Header />
       <div className="login-container">
-        <div className="login-card">
-          <div className="login-header">
-            <img src="/logo.png" alt="StyleGPT" className="login-logo" />
-            <h1>
-              Welcome to <span className="brand-name">StyleGPT</span>
-            </h1>
-            <h2>Sign in to continue</h2>
-            <p>
-              Access your personalized wardrobe, AI stylist chat, and outfit
-              recommendations.
-            </p>
-          </div>
-
-          <div className="login-social">
-            <button className="social-button google" type="button" disabled>
-              Continue with Google (coming soon)
-            </button>
-            <div className="social-icons">
-              <button type="button" disabled>
-                
-              </button>
-              <button type="button" disabled>
-                f
-              </button>
+        <Card className="login-card" radius="lg" shadow="md">
+          <CardHeader className="login-header">
+            <div className="login-header-content">
+              <Image src="/logo.png" alt="StyleGPT" className="login-logo" radius="md" />
+              <h1>
+                Welcome to <span className="brand-name">StyleGPT</span>
+              </h1>
+              <h2>Sign in to continue</h2>
+              <p>
+                Access your personalized wardrobe, AI stylist chat, and outfit
+                recommendations.
+              </p>
             </div>
-          </div>
+          </CardHeader>
 
-          <div className="divider">
-            <span></span>
-            <p>or login with your email</p>
-            <span></span>
-          </div>
+          <CardBody className="login-body">
+            <div className="login-social">
+              <Button fullWidth variant="bordered" isDisabled>
+                Continue with Google (coming soon)
+              </Button>
+              <div className="social-icons">
+                <Button isDisabled radius="full" size="sm" variant="flat">
+                  
+                </Button>
+                <Button isDisabled radius="full" size="sm" variant="flat">
+                  f
+                </Button>
+              </div>
+            </div>
 
-          <form className="login-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
+            <div className="divider">
+              <Divider />
+              <p>or login with your email</p>
+              <Divider />
+            </div>
+
+            <form className="login-form" onSubmit={handleSubmit}>
+              <Input
+                label="Email"
+                variant="bordered"
+                fullWidth
                 type="email"
-                id="email"
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                required
+                isRequired
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
+              <Spacer y={2} />
+              <Input
+                label="Password"
+                variant="bordered"
+                fullWidth
                 type="password"
-                id="password"
                 name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                required
+                isRequired
               />
-            </div>
+              <div className="form-actions">
+                <Link as={RouterLink} to="/forgot-password" color="primary">
+                  Forgot password?
+                </Link>
+              </div>
 
-            <div className="form-actions">
-              <Link to="/forgot-password" className="forgot-link">
-                Forgot password?
-              </Link>
-            </div>
+              {error && <div className="error-message">{error}</div>}
 
-            {error && <div className="error-message">{error}</div>}
+              <Button
+                fullWidth
+                type="submit"
+                color="primary"
+                variant="solid"
+                isLoading={loading}
+              >
+                {loading ? "Signing in..." : "Sign In"}
+              </Button>
+            </form>
+          </CardBody>
 
-            <PrimaryBtn type="submit" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
-            </PrimaryBtn>
-          </form>
-
-          <div className="login-footer">
+          <CardFooter className="login-footer">
             <p>
               New to StyleGPT?{" "}
-              <Link to="/register" className="register-link">
+              <Link as={RouterLink} to="/register" color="primary">
                 Create an account
               </Link>
             </p>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

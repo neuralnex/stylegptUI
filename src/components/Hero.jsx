@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import "./Hero.scss";
-import { PrimaryBtn, SecondaryBtn } from "./Btn";
+import { Button } from "@heroui/react";
 
 const Hero = () => {
   return (
@@ -19,10 +19,19 @@ const Hero = () => {
               StyleGPT ensures you always step out with confidence and flair.
             </p>
             <div className="hero-actions">
-              <SecondaryBtn text={"Explore Features"} classText="btn-s-90" />
-              <Link to="/fashion-chat" className="btn-p hero-chat-btn">
+              <Button as={RouterLink} to="/upload" variant="bordered" radius="full">
+                Explore Features
+              </Button>
+              <Button
+                as={RouterLink}
+                to="/chat"
+                color="primary"
+                variant="solid"
+                radius="full"
+                className="hero-chat-btn"
+              >
                 Chat for suggestions
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
