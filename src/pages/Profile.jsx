@@ -314,7 +314,7 @@ const Profile = () => {
               </div>
               <iframe
                 ref={iframeRef}
-                src={`https://${import.meta.env.VITE_READY_PLAYER_ME_SUBDOMAIN || "demo"}.readyplayer.me/avatar?frameApi${avatarId ? `&id=${avatarId}` : ""}`}
+                src={`https://${import.meta.env.VITE_READY_PLAYER_ME_SUBDOMAIN || ""}.readyplayer.me/avatar?frameApi${avatarId ? `&id=${avatarId}` : ""}`}
                 width="100%"
                 height="600px"
                 frameBorder="0"

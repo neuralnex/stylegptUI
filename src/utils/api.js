@@ -190,7 +190,7 @@ export const wardrobeAPI = {
 export const fashionChatAPI = {
   sendMessage: async (message, sessionId, images = null, retryCount = 0) => {
     try {
-      const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
+      const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "";
       
       const requestBody = { message, session_id: sessionId };
       if (images && Array.isArray(images) && images.length > 0) {
@@ -232,7 +232,7 @@ export const fashionChatAPI = {
 
   // Streaming version - returns an async generator
   sendMessageStream: async function* (message, sessionId, images = null) {
-    const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "https://nexusbert-stylegpt-milestone1.hf.space";
+    const FASHION_CHAT_URL = import.meta.env.VITE_FASHION_CHAT_URL || "";
     
     // Build form data for multipart request to streaming endpoint
     const formData = new FormData();

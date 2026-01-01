@@ -14,7 +14,6 @@ const Chat = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const fileInputRef = useRef(null);
   const [sessionId, setSessionId] = useState(() => {
-    // Initialize sessionId immediately if user is available
     if (user?.id) {
       return getSessionId("wardrobe_chat_session", user.id);
     }
