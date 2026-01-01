@@ -45,11 +45,8 @@ const Header = () => {
                   ) : null}
                   <span>{user?.name}</span>
                 </Link>
-                <Link className="btn-chat btn-p" to="/fashion-chat">
-                  Fashion Chat
-                </Link>
                 <Link className="btn-chat btn-p" to="/chat">
-                  Wardrobe Chat
+                  Chat
                 </Link>
                 <PrimaryBtn text="Logout" onClick={handleLogout} />
               </>
