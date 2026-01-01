@@ -248,19 +248,6 @@ const Chat = ({ initialMode = "wardrobe" }) => {
       <div className="chat-top-bar">
         <div className="top-bar-content">
           <h2>{useWardrobeMode ? "Wardrobe Chat" : "Fashion Chat"}</h2>
-          <div className="mode-toggle">
-            <label className="toggle-label">
-              <span>Wardrobe</span>
-              <div className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={useWardrobeMode}
-                  onChange={() => setUseWardrobeMode((prev) => !prev)}
-                />
-                <span className="slider" />
-              </div>
-            </label>
-          </div>
           <div className="top-bar-actions">
             <button className="clear-btn" onClick={handleClearChat}>
               Clear Chat
@@ -515,6 +502,21 @@ const Chat = ({ initialMode = "wardrobe" }) => {
       </div>
 
       <div className="input-area">
+        <div className="input-top-row">
+          <div className="mode-toggle">
+            <label className="toggle-label">
+              <span>Wardrobe</span>
+              <div className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={useWardrobeMode}
+                  onChange={() => setUseWardrobeMode((prev) => !prev)}
+                />
+                <span className="slider" />
+              </div>
+            </label>
+          </div>
+        </div>
         <div className="chat-input-form">
           {selectedImages.length > 0 && (
             <div className="selected-images-preview">
