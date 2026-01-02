@@ -30,33 +30,48 @@ const Header = () => {
   return (
     <Navbar
       isBordered
-      maxWidth="xl"
+      maxWidth="full"
       position="sticky"
       className="hero-navbar"
       onMenuOpenChange={setIsMenuOpen}
+      classNames={{
+        wrapper: "max-w-7xl mx-auto px-4",
+        content: "gap-6",
+      }}
     >
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent className="sm:hidden nav-start" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
 
-      <NavbarContent justify="start">
-        <NavbarBrand as={RouterLink} to="/">
+      <NavbarContent justify="start" className="nav-start items-center">
+        <NavbarBrand as={RouterLink} to="/" className="navbar-brand">
           <Image src="/logo.png" alt="StyleGPT" className="navbar-logo" radius="sm" />
           <p className="navbar-title">StyleGPT</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-6" justify="center">
-        {menuItems.map((item) => (
-          <NavbarItem key={item.path} isActive={location.pathname === item.path}>
-            <Link as={RouterLink} color="foreground" to={item.path}>
-              {item.name}
-            </Link>
-          </NavbarItem>
-        ))}
+      <NavbarContent className="hidden sm:flex gap-10 nav-center" justify="center">
+        {menuItems.map((item) => {
+          const active = location.pathname === item.path;
+          return (
+            <NavbarItem key={item.path} isActive={active}>
+              <Button
+                as={RouterLink}
+                to={item.path}
+                variant={active ? "solid" : "light"}
+                color={active ? "primary" : "default"}
+                radius="full"
+                size="sm"
+                className="nav-pill"
+              >
+                {item.name}
+              </Button>
+            </NavbarItem>
+          );
+        })}
       </NavbarContent>
 
-      <NavbarContent justify="end" className="items-center gap-3">
+      <NavbarContent justify="end" className="items-center gap-4 nav-end">
         {isAuthenticated ? (
           <>
             <NavbarItem className="hidden sm:flex">
@@ -117,16 +132,18 @@ const Header = () => {
       <NavbarMenu>
         {menuItems.map((item) => (
           <NavbarMenuItem key={item.path}>
-            <Link
+            <Button
               as={RouterLink}
-              color="foreground"
-              className="w-full"
               to={item.path}
-              size="lg"
+              variant={location.pathname === item.path ? "solid" : "flat"}
+              color={location.pathname === item.path ? "primary" : "default"}
+              radius="full"
+              fullWidth
+              className="nav-pill-menu"
               onPress={() => setIsMenuOpen(false)}
             >
               {item.name}
-            </Link>
+            </Button>
           </NavbarMenuItem>
         ))}
         {isAuthenticated ? (

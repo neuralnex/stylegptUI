@@ -2,10 +2,13 @@
   background: var(--panel);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(18px);
+  padding: 0.75rem 1.5rem;
+  height: auto;
+  min-height: 64px;
 }
 
 .navbar-logo {
-  height: 32px;
+  height: 36px;
   width: auto;
   object-fit: contain;
   filter: brightness(0) invert(1);
@@ -13,12 +16,90 @@
 
 .navbar-title {
   font-weight: 700;
+  font-size: 1.25rem;
   color: var(--text);
-  margin-left: 8px;
-  letter-spacing: 0;
+  margin-left: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .navbar-user {
   color: var(--text);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Navbar content spacing adjustments
+:global(.hero-navbar) {
+  :global([data-slot="wrapper"]) {
+    gap: 1.75rem;
+  }
+  
+  :global([data-justify="end"]) {
+    gap: 1.2rem;
+  }
+  
+  :global([data-justify="center"]) {
+    gap: 2.75rem;
+  }
+  
+  :global([data-justify="start"]) {
+    gap: 1rem;
+  }
+}
+
+.nav-pill {
+  min-width: 120px;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.nav-pill-menu {
+  font-weight: 600;
+  justify-content: center;
+}
+
+/* Prevent wrapping on desktop */
+@media (min-width: 641px) {
+  :global(.hero-navbar [data-slot="wrapper"]) {
+    flex-wrap: nowrap;
+  }
+}
+
+.nav-center {
+  flex-wrap: nowrap;
+}
+
+.nav-end {
+  flex-wrap: nowrap;
+}
+
+.nav-start {
+  flex-wrap: nowrap;
+}
+
+// Mobile menu improvements
+@media (max-width: 640px) {
+  .hero-navbar {
+    padding: 0.5rem 1rem;
+    min-height: 56px;
+  }
+  
+  .navbar-logo {
+    height: 28px;
+  }
+  
+  .navbar-title {
+    font-size: 1.125rem;
+  }
 }
 

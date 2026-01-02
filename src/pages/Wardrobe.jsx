@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
 import Header from "../components/Header";
-import { Image } from "@heroui/react";
+import { Image, Button } from "@heroui/react";
 import "./Wardrobe.scss";
 
 const Wardrobe = () => {
@@ -128,8 +128,12 @@ const Wardrobe = () => {
               <option value="streetwear">Streetwear</option>
               <option value="sportswear">Sportswear</option>
             </select>
-            <button type="submit" className="btn-p">Apply</button>
-            <button type="button" className="btn-clear" onClick={clearFilters}>Clear</button>
+            <Button type="submit" color="primary" variant="solid" radius="full" className="btn-p">
+              Apply
+            </Button>
+            <Button type="button" variant="light" radius="full" className="btn-clear" onPress={clearFilters}>
+              Clear
+            </Button>
           </form>
         </div>
 
@@ -141,21 +145,30 @@ const Wardrobe = () => {
           <div className="wardrobe-empty">
             <h2>No items yet</h2>
             <p>Upload your clothes in Upload Wardrobe to see them here.</p>
-            <button className="btn-p" onClick={() => navigate("/upload")}>Upload Wardrobe</button>
+            <Button color="primary" variant="solid" radius="full" className="btn-p" onPress={() => navigate("/upload")}>
+              Upload Wardrobe
+            </Button>
           </div>
         ) : (
           <div className="wardrobe-categories">
             <div className="categories-list">
-              {categoryList.map((category) => (
-                <button
-                  key={category}
-                  className={`category-btn ${selectedCategory === category ? "active" : ""}`}
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  <span className="category-name">{category}</span>
-                  <span className="category-count">({categories[category].length})</span>
-                </button>
-              ))}
+              {categoryList.map((category) => {
+                const active = selectedCategory === category;
+                return (
+                  <Button
+                    key={category}
+                    className={`category-btn ${active ? "active" : ""}`}
+                    onPress={() => handleCategoryClick(category)}
+                    variant={active ? "solid" : "bordered"}
+                    color={active ? "primary" : "default"}
+                    radius="full"
+                    size="sm"
+                  >
+                    <span className="category-name">{category}</span>
+                    <span className="category-count">({categories[category].length})</span>
+                  </Button>
+                );
+              })}
             </div>
 
             <div className={`wardrobe-items-container ${animating ? "animating" : ""}`}>
@@ -169,14 +182,17 @@ const Wardrobe = () => {
                         className="wardrobe-card"
                         style={{ animationDelay: `${index * 0.1}s` }}
                       >
-                        <button
+                        <Button
+                          isIconOnly
+                          variant="light"
+                          radius="full"
                           className="delete-btn"
-                          onClick={() => handleDelete(item.id, item.category)}
+                          onPress={() => handleDelete(item.id, item.category)}
                           title="Delete item"
                           aria-label="Delete item"
                         >
                           ×
-                        </button>
+                        </Button>
                         <Image
                           src={item.processedImageUrl || item.imageUrl}
                           alt={item.name || item.category}
@@ -196,14 +212,17 @@ const Wardrobe = () => {
                 <div className="wardrobe-grid all-items">
                   {items.map((item) => (
                     <div key={item.id} className="wardrobe-card">
-                      <button
+                      <Button
+                        isIconOnly
+                        variant="light"
+                        radius="full"
                         className="delete-btn"
-                        onClick={() => handleDelete(item.id, item.category)}
+                        onPress={() => handleDelete(item.id, item.category)}
                         title="Delete item"
                         aria-label="Delete item"
                       >
                         ×
-                      </button>
+                      </Button>
                       <Image
                         src={item.processedImageUrl || item.imageUrl}
                         alt={item.name || item.category}

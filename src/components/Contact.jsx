@@ -6,6 +6,7 @@ import { AiOutlineInstagram, AiOutlineBehance } from "react-icons/ai";
 import { CiTwitter } from "react-icons/ci";
 import { FiFacebook } from "react-icons/fi";
 import { SecondaryBtn } from "./Btn";
+import { Button } from "@heroui/react";
 
 const socialData = [
   {
@@ -46,10 +47,15 @@ const Contact = () => {
         <div className="text">
           <h1>Ready to transform your wardrobe?</h1>
           <p>Join StyleGPT today and experience the future of fashion styling</p>
-          <button className="btn-s">
+          <Button
+            color="primary"
+            variant="solid"
+            radius="full"
+            className="btn-s"
+            endContent={<CircleIcon />}
+          >
             Get Started
-            <CircleIcon />
-          </button>
+          </Button>
         </div>
       </div>
 

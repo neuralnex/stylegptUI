@@ -319,12 +319,15 @@ const Profile = () => {
             <div className="avatar-creator-content">
               <div className="avatar-creator-header">
                 <h2>Create Your Avatar</h2>
-                <button 
+                <Button
+                  isIconOnly
+                  variant="light"
+                  radius="full"
                   className="close-btn"
-                  onClick={() => setShowAvatarCreator(false)}
+                  onPress={() => setShowAvatarCreator(false)}
                 >
                   ×
-                </button>
+                </Button>
               </div>
               <iframe
                 ref={iframeRef}

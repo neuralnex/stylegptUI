@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { wardrobeAPI } from "../utils/api";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { Image } from "@heroui/react";
+import { Image, Button } from "@heroui/react";
 import Header from "../components/Header";
 import "./Wardrobe3D.scss";
 
@@ -556,7 +556,9 @@ const Wardrobe3D = () => {
         <Header />
         <div className="error-container">
           <p>{error}</p>
-          <button onClick={() => navigate("/wardrobe")}>Back to 2D View</button>
+          <Button variant="light" radius="full" onPress={() => navigate("/wardrobe")}>
+            Back to 2D View
+          </Button>
         </div>
       </div>
     );
@@ -569,7 +571,9 @@ const Wardrobe3D = () => {
         <div className="empty-container">
           <h2>No items yet</h2>
           <p>Upload your clothes to see them in 3D space</p>
-          <button onClick={() => navigate("/upload")}>Upload Wardrobe</button>
+          <Button color="primary" variant="solid" radius="full" onPress={() => navigate("/upload")}>
+            Upload Wardrobe
+          </Button>
         </div>
       </div>
     );
@@ -620,16 +624,19 @@ const Wardrobe3D = () => {
                           />
                         </span>
                         <span className="item-style">{item.style}</span>
-                        <button
+                        <Button
+                          isIconOnly
+                          variant="light"
+                          radius="full"
                           className="delete-item-btn"
-                          onClick={(e) => {
+                          onPress={(e) => {
                             e.stopPropagation();
                             handleDelete(item.id, item.category);
                           }}
                           title="Delete item"
                         >
                           🗑️
-                        </button>
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -642,9 +649,9 @@ const Wardrobe3D = () => {
             <p>🔍 Scroll to zoom</p>
             <p>👆 Click items to select</p>
           </div>
-          <button className="back-btn" onClick={() => navigate("/wardrobe")}>
+          <Button className="back-btn" variant="bordered" radius="full" onPress={() => navigate("/wardrobe")}>
             Back to 2D View
-          </button>
+          </Button>
         </div>
         <div className="canvas-container" ref={mountRef}></div>
       </div>

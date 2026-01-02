@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { PrimaryBtn } from "./Btn";
+import { Button } from "@heroui/react";
 import "./AuthModal.scss";
 
 const AuthModal = ({ onClose }) => {
@@ -55,9 +56,9 @@ const AuthModal = ({ onClose }) => {
   return (
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>
+        <Button className="close-btn" isIconOnly variant="light" radius="full" onPress={onClose}>
           ×
-        </button>
+        </Button>
         <h2>{isLogin ? "Login" : "Register"}</h2>
         <form onSubmit={handleSubmit}>
           {!isLogin && (
@@ -105,15 +106,17 @@ const AuthModal = ({ onClose }) => {
         </form>
         <p className="toggle-auth">
           {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <button
-            type="button"
-            onClick={() => {
+          <Button
+            variant="light"
+            size="sm"
+            radius="full"
+            onPress={() => {
               setIsLogin(!isLogin);
               setError("");
             }}
           >
             {isLogin ? "Register" : "Login"}
-          </button>
+          </Button>
         </p>
       </div>
     </div>

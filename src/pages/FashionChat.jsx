@@ -243,13 +243,13 @@ const FashionChat = () => {
         <div className="top-bar-content">
           <h2>Fashion Chat</h2>
           <div className="top-bar-actions">
-            <button className="clear-btn" onClick={handleClearChat}>
+            <Button variant="light" radius="full" className="clear-btn" onPress={handleClearChat}>
               Clear Chat
-            </button>
+            </Button>
             <span className="user-name">{user?.name}</span>
-            <button className="logout-btn" onClick={logout}>
+            <Button color="secondary" variant="flat" radius="full" className="logout-btn" onPress={logout}>
               Logout
-            </button>
+            </Button>
           </div>
         </div>
       </div>

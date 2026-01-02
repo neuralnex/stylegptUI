@@ -377,9 +377,13 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                           ))}
                         </div>
                         {!msg.avatarWithOutfitUrl && (
-                          <button 
+                          <Button
                             className="try-on-avatar-btn"
-                            onClick={async () => {
+                            variant="solid"
+                            color="primary"
+                            radius="full"
+                            size="sm"
+                            onPress={async () => {
                               if (loading) return;
                               try {
                                 const assetIds = msg.selectedItems
@@ -410,7 +414,7 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                             }}
                           >
                             👤 Try on Avatar
-                          </button>
+                          </Button>
                         )}
                       </div>
                     )}

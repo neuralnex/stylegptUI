@@ -1,20 +1,32 @@
 import React from "react";
+import { Button } from "@heroui/react";
 import CircleIcon from "./CircleIcon";
 
 const SecondaryBtn = ({ text, classText = "", ...props }) => {
   return (
-    <button className={`btn-s ${classText}`.trim()} {...props}>
+    <Button
+      variant="light"
+      radius="full"
+      className={`btn-s ${classText}`.trim()}
+      endContent={<CircleIcon />}
+      {...props}
+    >
       {text}
-      <CircleIcon />
-    </button>
+    </Button>
   );
 };
 
 const PrimaryBtn = ({ text, className = "", children, ...props }) => {
   return (
-    <button className={`btn-p ${className}`.trim()} {...props}>
+    <Button
+      color="primary"
+      variant="solid"
+      radius="full"
+      className={`btn-p ${className}`.trim()}
+      {...props}
+    >
       {text || children}
-    </button>
+    </Button>
   );
 };
 
