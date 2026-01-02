@@ -575,7 +575,7 @@ const Chat = ({ initialMode = "wardrobe" }) => {
                 radius="full"
                 title="Upload images"
               >
-                📷
+                🔗
               </Button>
               <Input
                 ref={inputRef}

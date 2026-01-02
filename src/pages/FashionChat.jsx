@@ -369,7 +369,7 @@ const FashionChat = () => {
                 radius="full"
                 title="Upload images"
               >
-                📷
+                🔗
               </Button>
               <Input
                 ref={inputRef}

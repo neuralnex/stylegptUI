@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, useNavigate, useHref } from "react-router-dom";
 import { HeroUIProvider } from "@heroui/react";
 import App from "./App";
-import "@heroui/theme/styles.css";
+import "@heroui/theme/dist/css/heroui.css";
 import "./index.scss";
 
 const AppWithProviders = () => {
